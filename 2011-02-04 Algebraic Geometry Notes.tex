@@ -486,6 +486,65 @@
 
 
 \begin{notessection}{2}{11}{2011}
+  Last time, we gave a proof that almost every plane curve of degree $d$ is smooth parameter space $\mathbb A^N$ : $N = \binom{d+2}{2}$.
+  
+  Another proof, continuing from the middle of the last one:
+  \begin{proof}
+    The dimension of $S$ (as defined last time) is $N + 2 - 3 = N - 1$ (the three from $F_x = F_y = F_z = 0$).  So $\pi(S)$ is at most $N - 1$ dimensional, and so it's $\overline{\pi(S)}$.  But $\dim Z = N$, so $\overline{\pi(S)} \ne Z$.
+  \end{proof}
+  
+  \paragraph{Some words about topology} $\mathbb A^N= \mathbb C^N$ is a complex variety of dimension $N$. As a real manifold, it's dimension is $2N$.
+  In the complex topology, you can have closed disks, e.g. $|z| \le 1$ (has positive measure).  In the Zariski topology, closed subsets have no measure.  e.g., in $\mathbb C$, the only closed subsets are finite point sets.  In $\mathbb C^2$, $V(ax + by + c)$ has no measure (it's a complex plane (dimension 1)).
+  
+  \begin{prop*}
+    A smooth curve $C$ of degree 3 in $\mathbb P^2$ contains exactly 9 flex points.
+  \end{prop*}
+  \begin{proof}
+    Let $f$ be a cubic defining $C$.  The second partial derivatives of $f$ are linear, so the determinant of the Hessian is a cubic polynomial which defines the Hessian curve $H$.
+    \begin{thm*}[B\'ezout's theorem]
+      A curve of degree $m$ in $\mathbb{P}^2$ intersects a curve of degree $n$ in exactly $mn$ points.
+    \end{thm*}
+    By this theorem (not yet proved), the two cubics $C$ and $H$ intersect in 9 points.  One can show that the multiplicities are one, and that $C$ and $H$ don't have a factor in common.  Thus, we get exactly 9 flexes.
+  \end{proof}
+  
+  \begin{eg*}
+    $y^2 = x^3 - x$ \\
+    homogenization gives $y^2z = x^3 - xz^2$ \\
+    Then \fbox{$f = x^3 - xz^2 - y^2z$}. \\
+    The Hessian matrix is $$\begin{bmatrix} 6x & 0 & -2z \\ 0 & -2z & -2y \\ -2z & -2y & -2x \end{bmatrix}$$
+    Then $H(f) = 8(3zx^2 - 3y^2x + z^3)$.  \\
+    The flexes: You can eliminate $z$ from $f = H(f) = 0$.  Then you get a homogeneous polynomial in $x$ and $y$.  You can solve for $x / y$, let $y$ be 1, and then plug back in and solve for $z$.  In this example, we get that one of the flex points is at $(x, y, z) = (0, 0, 1)$.
+  \end{eg*}
+  
+  \subsection*{Genus and Euler characteristic}
+    Goal: Want to understand the topological structure of smooth plane curves.
+    
+    It's useful to put them in a family.  Notation as above.  Let $U = Z  - \Sigma = Z - \pi(S)$.  This is the parameter space for smooth plane curves of degree $d$.  The smooth plane curves are the fibers of the projection $\mathcal C\subset \mathbb P^2 \times U$ to $U$.  
+    
+    \begin{prop*}
+      All the smooth curves of degree $d$ are homeomorphic to each other (as real manifolds of dimension 2).
+    \end{prop*}
+    \begin{proof}
+      The problem set shows that $U$ is path-connected (in the complex topology).  Connect the two points in $U$ (which correspond to curves in $\mathbb P^2 \times U$) by a path.
+      
+      \begin{center}\includegraphics[width=0.5\textwidth]{2011-02-11_Diagram_001}\end{center}
+      
+      We have a function $f: M \to [0, 1]$.  Define a diffeomorphism by taking the gradient of $f$, and look at the gradient flow.  This tells us how to identify the fibers.
+    \end{proof}
+    
+    \begin{cor*}
+      Smooth plane curves are orientable, connected surfaces.
+    \end{cor*}
+    \begin{proof}
+      Orientability is simple.  To orient a smooth surface, we must give a continuously varying orientation to the tangent planes.  But tangent plane is a $\mathbb C$-vector space (of dimension one, $\sum f_i(p) v_i = U$).  So multiplying any tangent vector by $i$ defines a counterclockwise rotation by $90^\circ$, which orients the tangent plane.
+      
+      We'll do connected next time.
+    \end{proof}
+  
+\end{notessection}
+
+
+\begin{notessection}{2}{14}{2011}
   
 \end{notessection}
 
