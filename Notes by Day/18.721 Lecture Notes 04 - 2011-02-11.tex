@@ -1,4 +1,4 @@
-\documentclass [letterpaper,11pt,twoside] {article}\input {header-small}\usepackage [margin=1in]{geometry}\def \d {\, {\rm d}}\usepackage {wasysym}\usepackage {pdfcomment}\usepackage {cancel}\newcommand {\cheadcontent }{18.721 Notes}\pagestyle {fancy}\headheight 13.7pt\fancyhead {}\fancyhead {Jason Gross}\fancyfoot {}\lhead {Jason Gross}\rhead {\TeX ed on \today }\chead {\cheadcontent }\cfoot {\thepage \ of \pageref {LastPage}}\begin {document}
+\documentclass [letterpaper,11pt,twoside] {article}\input {header-small}\usepackage [margin=1in]{geometry}\def \d {\, {\rm d}}\usepackage {wasysym}\usepackage {pdfcomment}\usepackage {cancel}\usepackage [all]{xy}\newcommand {\cheadcontent }{18.721 Notes}\pagestyle {fancy}\headheight 13.7pt\fancyhead {}\fancyhead {Jason Gross}\fancyfoot {}\lhead {Jason Gross}\rhead {\TeX ed on \today }\chead {\cheadcontent }\cfoot {\thepage \ of \pageref {LastPage}}\begin {document}
 \setcounter {section}{3}\section {Friday, February 11, 2011}
   Last time, we gave a proof that almost every plane curve of degree $d$ is smooth parameter space $\mathbb A^N$ : $N = \binom{d+2}{2}$.
 
@@ -27,7 +27,7 @@
     Then \fbox{$f = x^3 - xz^2 - y^2z$}. \\
     The Hessian matrix is $$\begin{bmatrix} 6x & 0 & -2z \\ 0 & -2z & -2y \\ -2z & -2y & -2x \end{bmatrix}$$
     Then $H(f) = 8(3zx^2 - 3y^2x + z^3)$.  \\
-    The flexes: You can eliminate $z$ from $f = H(f) = 0$.  Then you get a homogeneous polynomial in $x$ and $y$.  You can solve for $x / y$, let $y$ be 1, and then plug back in and solve for $z$.  In this example, we get that one of the flex points is at $(x, y, z) = (0, 1, 0)$.
+    The flexes: You can eliminate $z$ from $f = H(f) = 0$.  Then you get a homogeneous polynomial in $x$ and $y$.  You can solve for $x / y$, let $y$ be 1, and then plug back in and solve for $z$.  In this example, we get that one of the flex points is at $(x:y:z) = (0:1:0)$.
   \end{eg*}
 
   \subsection*{Genus and Euler characteristic}

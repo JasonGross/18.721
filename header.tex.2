@@ -355,17 +355,17 @@
 %\fi}
 %\newcommand{\bra}[2][]{\left\langle #1 \right|}
 %\newcommand{\ket}[2][]{\left\langle #1 \right|}
-\newcommand{\braket}[1]{\ensuremath{{%
+\newcommand{\braket}[1]{{%
   \catcode`\<=\active
   \catcode`\>=\active
   \catcode`\|=\active
   \def<{\left\langle}%
-  \def|{\middle\vert}%
+  \def|{\mid\vert}%
   \def>{\right\ragnle}%
   \left.%
   \scantokens{#1}%
   \right.%
-}}}
+}}
 
 %====================================================================================================
 

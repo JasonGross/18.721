@@ -353,20 +353,6 @@
 %\else
 %  \def\csname #1\endcsname{\text{#2}}%
 %\fi}
-%\newcommand{\bra}[2][]{\left\langle #1 \right|}
-%\newcommand{\ket}[2][]{\left\langle #1 \right|}
-\newcommand{\braket}[1]{\ensuremath{{%
-  \catcode`\<=\active
-  \catcode`\>=\active
-  \catcode`\|=\active
-  \def<{\left\langle}%
-  \def|{\middle\vert}%
-  \def>{\right\ragnle}%
-  \left.%
-  \scantokens{#1}%
-  \right.%
-}}}
-
 %====================================================================================================
 
 %================================= Proof Cases ===============================

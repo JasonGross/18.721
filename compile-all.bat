@@ -1,4 +1,5 @@
 pushd Notes by Day
+(rm "18.721 Lecture Notes 06 - 2011-02-16.pdf") & (pdflatex "18.721 Lecture Notes 06 - 2011-02-16.tex") & (rm "18.721 Lecture Notes 06 - 2011-02-16.pdf") & (pdflatex "18.721 Lecture Notes 06 - 2011-02-16.tex")
 (rm "18.721 Lecture Notes 05 - 2011-02-14.pdf") & (pdflatex "18.721 Lecture Notes 05 - 2011-02-14.tex") & (rm "18.721 Lecture Notes 05 - 2011-02-14.pdf") & (pdflatex "18.721 Lecture Notes 05 - 2011-02-14.tex")
 (rm "18.721 Lecture Notes 04 - 2011-02-11.pdf") & (pdflatex "18.721 Lecture Notes 04 - 2011-02-11.tex") & (rm "18.721 Lecture Notes 04 - 2011-02-11.pdf") & (pdflatex "18.721 Lecture Notes 04 - 2011-02-11.tex")
 (rm "18.721 Lecture Notes 03 - 2011-02-09.pdf") & (pdflatex "18.721 Lecture Notes 03 - 2011-02-09.tex") & (rm "18.721 Lecture Notes 03 - 2011-02-09.pdf") & (pdflatex "18.721 Lecture Notes 03 - 2011-02-09.tex")
