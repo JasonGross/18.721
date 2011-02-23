@@ -1,0 +1,118 @@
+\documentclass [letterpaper,11pt,twoside]{article}
+\input {header-small}
+\usepackage[margin=1in]{geometry}
+
+\usepackage{cancel}
+% email to abhinav@math.mit.edu
+\def\d{\, {\rm d}}
+
+%\usepackage{pgf,tikz}
+%\usetikzlibrary{arrows}
+\usepackage{wasysym}
+\usepackage{pdfcomment}
+
+\usepackage{datetime}
+\usepackage{verbatim}
+\usepackage[all]{xy}
+\def\classnumber{18.721}
+\def\classname{Algebraic Geometry}
+\edef\cheadcontent{\classnumber\space Notes}
+
+\pagestyle{fancy}
+\headheight 13.7pt
+\fancyhead{}
+\fancyhead{Jason Gross}%\today}
+\fancyfoot{}
+\lhead{Jason Gross}
+\rhead{\TeX ed on \today}
+\chead{\cheadcontent}
+\cfoot{\thepage\space of \pageref{LastPage}}
+
+\begin {document}
+\setcounter {section}{8}\section {Wednesday, February 23, 2011}
+  \subsection*{Hilbert Basis Theorem}
+    A ring $A$ is Noetherian if the ideals are finitely generated.
+
+    \begin{thm*}[Hilbert Basis Theorem]
+      If $R$ is Noetherian, then $R[x]$ is Noetherian
+    \end{thm*}
+    \begin{cor*}
+      $\mathbb C[x_1,\ldots, x_n]$ is Noetherian \\
+      Any finite-type (finitely generated as an algebra (everything is a polynomial in finitely many things)) $\mathbb C$-algebra is Noetherian.  ($A \cong \mathbb C[x] / I$)
+    \end{cor*}
+
+    \noindent \emph{Equivalent conditions on $A$}:
+    \begin{enumerate}
+      \item $A$ is noetherian (ideals are finitely generated)
+      \item Every infinite increasing family $I_1 \subset I_2 \subset \cdots $ of ideals becomes constant eventually
+      \item[] ($I_1 < I_2 < \cdots$ chain is finite)
+      \item Every non-empty set $S$ of ideals contains maximal elements ($\exists I \in S$ such that $I \not\subset J$ for any $J \in S$, $J \ne I$)
+    \end{enumerate}
+    \begin{cor*}
+      If $A$ is noetherian,$I$ is an ideal of $A$,  and $I < A$, then $I$ is contained in a maximal ideal.  (The maximal ideal is a maximum element in the set of ideals $< A$.)
+    \end{cor*}
+    \begin{cor*}
+      If $A$ contains no maximal ideal, then $A$ is the zero ring.
+
+      $\spec A \ne \emptyset \iff A = \{0\}$
+    \end{cor*}
+
+    Adjoining inverses to $A = \mathbb C[x]$ ($x = x_1, \ldots, x_n$), $B = A[g^{-1}] = \mathbb C[x, y] / (y g - 1)$.  \\
+    Then $\spec A = \mathbb A^n$, and $\spec B \approx \mathbb A^n - V(g)$.
+
+    \begin{thm*}[Strong Nullstellensatz]
+      Let $I$ be an ideal of $\mathbb C[x]$, $g\in \mathbb C[x]$.  Suppose $g$ vanishes identically on $V(I)$.  Then $g^N \in I$ for some $N \gg 0$.
+    \end{thm*}
+    \begin{proof}
+      \emph{Idea}: Find a ring with no maximal ideal.  It is therefore the zero ring.  Play with this fact.
+
+      Say $I = (f_1, \ldots, f_r)$, $f_i \in \mathbb C[x]$ ($x = x_1, \ldots, x_n$).  Let's inspect the locus of zeros in $\mathbb A^{n+1}_{x,y}$, $V = V(f_1, \ldots, f_r; yg - 1)$.
+
+      If $(x^0, y^0) \in V$, then $x^0 \in V(I) = V(f_1, \ldots, f_r) \subset \mathbb A^n_x$.  Therefore $g(x^0) = 0$ (by hypothesis).  Then there is no $y^0$ such that $y^0 g(x_0) = 1$.
+
+      Therefore, $V = \emptyset$.
+
+      We also have that $V = \spec \mathbb C[x, y] / (f_1, \ldots, f_r, yg - 1)$.  Then $\mathbb C[x, y] / (f, yg - 1) = \{0\}$.  Therefore, $(g, yg - 1)$ is the unit ideal in $\mathbb C[x, y]$.  This means that we can write 1 as a polynomial combination of $f$ and $yg - 1$.  Say
+      $$1 = p_1(x, y)f_1(x) + \cdots + f_r(x, y) f_r(x) + q(x, y) (y g - 1).$$
+      Now work in the ring $B = \mathbb C[x][g^{-1}] = \mathbb C[x, y] / (y g - 1)$.  In $B$ $yg - 1 = 0$ and $y = g^{-1}$.  Then
+      $$1 = p_1(x, g^{-1}) f_1(x) + \cdots + p_r(x, g^{-1}) f_r(x) + 0.$$
+      Multiply by $g^N$ to clear denominators.  Then, since $g = g(x)$,
+      $$g^N = \tilde p_1(x) f_1(x) + \cdots + \tilde p_r(x) f_r(x).$$
+      Therefore, $g^N \in I$.
+    \end{proof}
+
+    \textsc{Note}: If $I \subset J$ are ideals in $\mathbb C[x]$, then $V(I) \supseteq V(J)$.  But $V(x_1) = V(x_1^2)$.
+
+    Let $I$ be an ideal.  Then $\operatorname{rad}I = \text{radical of }I = \mathset[g]{g^n \in I,\text{ some }n > 0}$.
+
+    \begin{thm*}
+      $$V(I) \supset V(J) \iff I \subset \operatorname{rad}J$$
+      $$V(I) = V(J) \iff \operatorname{rad}I = \operatorname{rad} J$$
+    \end{thm*}
+    \begin{proof}
+      Say $V(I) \supset V(J)$.  Take $g\in I$.  Then $g = 0$ on $V(J)$.  Then $g^N \in J$ for some $N$ by the strong Nullstellensatz, and so $g \in \operatorname{rad} J$.
+
+      The other direction is left as an exercise.
+    \end{proof}
+
+    \begin{defn*}
+      Let $X$ be a topological space.  Then a closed subset $C$ is \emph{irreducible} if you can't write $C = C_1 \cup C_2$ where $C_i$ closed, $C_i < C$.
+    \end{defn*}
+
+    $A$ a finite type algebra is noetherian, satisfies the ascending chain condition on ideals.  Then $\spec A$ has the descending chain condition on ideals.
+
+    \noindent \emph{Prime ideals}: Given a polynomial ring $R$: (equivalent conditions)
+    \begin{itemize}
+      \item $R / P$ is a domain
+      \item $P < R$, $ab\in P \implies a \in P$ or $b\in P$
+      \item $A$, $B$ ideals of $R$, $AB \subset P \implies A \subset P$ or $B \subset P$.  (Recall that the product ideal $AB  = \mathset[\text{finite sums }\sum a_i b_i]{a_i\in A, b_i\in B}$.)
+    \end{itemize}
+    \begin{proof}
+      (2) $\implies$ (3) \\
+      Say $AB \subset P$, but $A \subset P$. \\
+      $\exists a\in A$, $a\notin P$. \\
+      $AB \subset P \implies B \subset P$ \\
+      $\forall b\in B$, $ab\in P$, $\therefore b\in P$, so $B\subset P$.
+    \end{proof}
+
+\end {document}

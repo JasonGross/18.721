@@ -1,4 +1,34 @@
-\documentclass [letterpaper,11pt,twoside] {article}\input {header-small}\usepackage [margin=1in]{geometry}\def \d {\, {\rm d}}\usepackage {wasysym}\usepackage {pdfcomment}\usepackage {cancel}\usepackage [all]{xy}\newcommand {\cheadcontent }{18.721 Notes}\pagestyle {fancy}\headheight 13.7pt\fancyhead {}\fancyhead {Jason Gross}\fancyfoot {}\lhead {Jason Gross}\rhead {\TeX ed on \today }\chead {\cheadcontent }\cfoot {\thepage \ of \pageref {LastPage}}\begin {document}
+\documentclass [letterpaper,11pt,twoside]{article}
+\input {header-small}
+\usepackage[margin=1in]{geometry}
+
+\usepackage{cancel}
+% email to abhinav@math.mit.edu
+\def\d{\, {\rm d}}
+
+%\usepackage{pgf,tikz}
+%\usetikzlibrary{arrows}
+\usepackage{wasysym}
+\usepackage{pdfcomment}
+
+\usepackage{datetime}
+\usepackage{verbatim}
+\usepackage[all]{xy}
+\def\classnumber{18.721}
+\def\classname{Algebraic Geometry}
+\edef\cheadcontent{\classnumber\space Notes}
+
+\pagestyle{fancy}
+\headheight 13.7pt
+\fancyhead{}
+\fancyhead{Jason Gross}%\today}
+\fancyfoot{}
+\lhead{Jason Gross}
+\rhead{\TeX ed on \today}
+\chead{\cheadcontent}
+\cfoot{\thepage\space of \pageref{LastPage}}
+
+\begin {document}
 \setcounter {section}{4}\section {Monday, February 14, 2011}
   \subsection{Plane curves}
     monomials $m_1, \ldots, m_N$, coefficients $z_1,\ldots, z_N$

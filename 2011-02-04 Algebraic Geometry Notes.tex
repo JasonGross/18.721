@@ -1,5 +1,131 @@
 \documentclass[letterpaper,11pt,twoside]{article}
+\usepackage{etextools,verbatim}
 \input{header}
+
+%============== Copy Diagrams ======================
+\write18{mkdir "Notes by Day"}
+%===================================================
+
+\newcounter{notes-file-number}
+\setcounter{notes-file-number}{0}
+%mdy
+
+
+%========================= Compilation ============================
+\newwrite\compileout
+\newtoks\filelist
+\filelist={\relax}
+
+
+\newcommand{\compilefilepart}[1]{%\write18{(pushd Notes by Day) & (rm "#1.pdf") & (pdflatex "#1.tex") & (rm "#1.pdf") & (pdflatex "#1.tex") & (popd)}
+{\edef\temp{#1}
+\global\filelist=\expandafter\expandafter\expandafter{\expandafter\temp\expandafter,\the\filelist}}%
+}
+\makeatletter
+\newcommand{\writeallcompiles}{
+  \immediate\openout\compileout compile-all.tex
+  \immediate\write\compileout{\expandafter\@gobble\detokenize{##!/bin/bash}}
+  \immediate\write\compileout{pushd "Notes by Day"}
+  \expandafter\writecompiles\the\filelist
+  \immediate\write\compileout{popd}
+  \immediate\closeout\compileout
+  \immediate\write18{mv compile-all.tex compile-all.bat}
+  \immediate\write18{chmod +x compile-all.bat}
+}
+
+\def\writecompiles#1,#2\relax{
+\message{Writing compilation routine for #1^^J}
+\immediate\write\compileout{(rm "#1.pdf") & (pdflatex "#1.tex") && (rm "#1.pdf") && (pdflatex "#1.tex")}
+\def\second{#2}\def\emptyarg{}
+\ifx#2\emptyarg
+\else
+  \writecompiles#2\relax
+\fi}
+
+
+\newcommand{\compileallfiles}{
+\immediate\write18{echo Copying diagrams...} %^^J
+\immediate\write18{copy /y *-*-*_Diagram_*.pdf "Notes by Day/"}
+\immediate\write18{cp -f *-*-*_Diagram_*.pdf "Notes by Day/"}
+\message{Writing compilation routines...^^J}
+\writeallcompiles
+\immediate\write18{echo Compiling files...}%^^J}
+\immediate\write18{start compile-all.bat}
+\immediate\write18{bash compile-all.bat}
+}
+\AtBeginDocument{\AtEndDocument{\compileallfiles}}
+
+
+%================================================
+
+
+\makeatletter
+
+
+%================ writing to this ===============
+\newcommand{\notes@pre@writetothis}{\gdef\notes@curcode{}}%\immediate\openout\esgpset@tempout\esgpset@tempfilename
+\newcommand{\notes@do@writetothis}[1]{\expandnext{\gappto\notes@curcode}{#1^^J}}%\immediate\write\esgpset@tempout{\unexpanded{#1}}
+\newcommand{\notes@post@writetothis}{\expandnext{\scantokens}{\notes@curcode}}%\immediate\closeout\esgpset@tempout\input{\esgpset@tempfilename}%
+%================================================
+
+%================== Make a preamble environment, that aggregates a preamble and then executes it ========
+\newenvironment{preamble}{%
+  \begingroup% Lets Keep the Changes Local
+    \notes@pre@writetothis
+    \@bsphack
+    \let\do\@makeother\dospecials\catcode`\^^M\active
+    \def\verbatim@processline{\notes@do@writetothis{\the\verbatim@line}}%
+    \verbatim@start
+}{\@esphack\endgroup\global\let\notes@header=\notes@curcode\aftergroup\notes@post@writetothis\relax}
+\newcommand{\writeheader}[1]{%
+  \immediate\write#1{\detokenize{\documentclass[letterpaper,11pt,twoside]{article}}}%
+  \immediate\write#1{\detokenize{\input{header-small}}}%
+  \immediate\write#1{\notes@header}%
+  \immediate\write#1{\detokenize{\begin{document}}}%
+}
+%================================================
+
+
+\newwrite\notes@section@write
+\newenvironment{notessection}[3]{%
+  \addtocounter{notes-file-number}{1}%
+  \edef\notes@filenamepart{\classnumber\space Lecture Notes \twodigit{\value{notes-file-number}} - #3-\twodigit{#1}-\twodigit{#2}}%
+  \edef\notes@filename{"Notes by Day/\notes@filenamepart.tex"}%
+  \computedayofweek{#2}{#1}{#3}%
+  \edef\sectiontext{\dayofweeknameid{\dayofweek}, 
+    \ifcase#1\relax
+    \or January%
+    \or February%
+    \or March%
+    \or April%
+    \or May%
+    \or June%
+    \or July%
+    \or August%
+    \or September%
+    \or October%
+    \or November%
+    \or December%
+    \fi\space #2, #3}%
+  \immediate\openout\notes@section@write\notes@filename
+  \writeheader{\notes@section@write}%
+  \begingroup% Lets Keep the Changes Local
+    \edef\temp{\noexpand\noexpand\noexpand\setcounter{section}{\the\value{section}}\noexpand\section{\expandafter\noexpand\sectiontext}}
+    \notes@pre@writetothis
+    \@bsphack
+    \let\do\@makeother\dospecials\catcode`\^^M\active
+    \def\verbatim@processline{%
+      \immediate\write\notes@section@write{\the\verbatim@line}%
+      \notes@do@writetothis{\the\verbatim@line}}%
+    \expandafter\verbatim@start
+    \temp}%
+{\immediate\write\notes@section@write{\detokenize{\end{document}}}%
+ \immediate\closeout\notes@section@write\@esphack\endgroup%
+ \compilefilepart{\notes@filenamepart}%
+ \aftergroup\notes@post@writetothis\relax
+}%
+
+\begin{preamble}
 \usepackage[margin=1in]{geometry}
 
 \usepackage{cancel}
@@ -26,222 +152,8 @@
 \lhead{Jason Gross}
 \rhead{\TeX ed on \today}
 \chead{\cheadcontent}
-\cfoot{\thepage\ of \pageref{LastPage}}
-
-%============== Copy Diagrams ======================
-\write18{mkdir "Notes by Day"}
-%===================================================
-
-\newcounter{notes-file-number}
-\setcounter{notes-file-number}{0}
-%mdy
-
-
-%========================= Compilation ============================
-\newwrite\compileout
-\newtoks\filelist
-\filelist={\relax}
-
-
-\newcommand{\compilefilepart}[1]{%\write18{(pushd Notes by Day) & (rm "#1.pdf") & (pdflatex "#1.tex") & (rm "#1.pdf") & (pdflatex "#1.tex") & (popd)}
-{\edef\temp{#1}
-\global\filelist=\expandafter\expandafter\expandafter{\expandafter\temp\expandafter,\the\filelist}}%
-}
-
-\newcommand{\writeallcompiles}{
-\immediate\openout\compileout compile-all.tex
-\immediate\write\compileout{pushd Notes by Day}
-\expandafter\writecompiles\the\filelist
-\immediate\write\compileout{popd}
-\immediate\closeout\compileout
-\immediate\write18{mv compile-all.tex compile-all.bat}
-}
-
-\def\writecompiles#1,#2\relax{
-\message{Writing compilation routine for #1^^J}
-\immediate\write\compileout{(rm "#1.pdf") & (pdflatex "#1.tex") & (rm "#1.pdf") & (pdflatex "#1.tex")}
-\def\second{#2}\def\emptyarg{}
-\ifx#2\emptyarg
-\else
-  \writecompiles#2\relax
-\fi}
-
-
-\newcommand{\compileallfiles}{
-\immediate\write18{echo Copying diagrams...} %^^J
-\immediate\write18{copy /y *-*-*_Diagram_*.pdf "Notes by Day/"}
-\message{Writing compilation routines...^^J}
-\writeallcompiles
-\immediate\write18{echo Compiling files...}%^^J}
-\immediate\write18{start compile-all.bat}
-}
-\AtBeginDocument{\AtEndDocument{\compileallfiles}}
-
-
-%================================================
-
-
-\makeatletter
-\newwrite\notesout
-
-\newwrite\@notes@section@write
-\newwrite\@notes@section@write@temp
-\newenvironment{notessection}[3]{%
-\addtocounter{notes-file-number}{1}%
-\edef\notesfilenamepart{\classnumber\space Lecture Notes \twodigit{\value{notes-file-number}} - #3-\twodigit{#1}-\twodigit{#2}}%
-\edef\notesfilename{"Notes by Day/\notesfilenamepart.tex"}%
-\computedayofweek{#2}{#1}{#3}%
-\edef\sectiontext{\dayofweeknameid{\dayofweek}, 
-\ifcase#1\relax
-\or January%
-\or February%
-\or March%
-\or April%
-\or May%
-\or June%
-\or July%
-\or August%
-\or September%
-\or October%
-\or November%
-\or December%
-\fi\space #2, #3}%
-\immediate\openout\notesout\notesfilename
-\writeheader{\notesout}%
-\begingroup% Lets Keep the Changes Local
-  \edef\temp{\noexpand\noexpand\noexpand\setcounter{section}{\the\value{section}}\noexpand\section{\expandafter\noexpand\sectiontext}}
-  \@bsphack
-  \let\@notes@section@write=\notesout
-  \immediate\openout \@notes@section@write@temp \jobname.sec
-  \let\do\@makeother\dospecials\catcode`\^^M\active
-  \def\verbatim@processline{%
-    \immediate\write\@notes@section@write{\the\verbatim@line}%
-    \immediate\write\@notes@section@write@temp{\the\verbatim@line}}%
-  \expandafter\verbatim@start
-  \temp}%
-{{\let\end=\relax\immediate\write\@notes@section@write{\end{document}}}%
- \immediate\closeout\@notes@section@write
- \immediate\closeout\@notes@section@write@temp\@esphack\endgroup%
- \compilefilepart{\notesfilenamepart}
-\input{\jobname.sec}%
-}%
-
-
-
-
-
-
-
-\catcode`\^^M\active
-\newcommand{\writeheader}[1]{\begingroup
-\let\ =\relax
-\let\,=\relax
-\let\RelativitySection=\relax
-\let\TeX=\relax
-\let\begin=\relax
-\let\cfoot=\relax
-\let\chead=\relax
-\let\cheadcontent=\relax
-\let\d=\relax
-\let\def=\relax
-\let\documentclass=\relax
-\let\fancyfoot=\relax
-\let\fancyhead=\relax
-\let\hbox=\relax
-\let\headheight=\relax
-\let\input=\relax
-\let\kern=\relax
-\let\leavevmode=\relax
-\let\lhead=\relax
-\let\lower=\relax
-\let\newcommand=\relax
-\let\oldsection=\relax
-\let\pageref=\relax
-\let\pagestyle=\relax
-\let\raise=\relax
-\let\rhead=\relax
-\let\rm=\relax
-\let\scriptfont=\relax
-\let\section=\relax
-\let\sfrac=\relax
-\let\the=\relax
-\let\thepage=\relax
-\let\today=\relax
-\let\usepackage=\relax
-\let\let=\relax
-\edef\temp{\documentclass[letterpaper,11pt,twoside] {article}
-\input{header-small}
-\usepackage[margin=1in]{geometry}
-
-\def\d{\, {\rm d}}
-
-\usepackage{wasysym}
-\usepackage{pdfcomment}
-\usepackage{cancel}
-\usepackage[all]{xy}
-\newcommand{\cheadcontent}{\classnumber\space Notes}
-
-\pagestyle{fancy}
-\headheight 13.7pt
-\fancyhead{}
-\fancyhead{Jason Gross}%\today}
-\fancyfoot{}
-\lhead{Jason Gross}
-\rhead{\TeX ed on \today}
-\chead{\cheadcontent}
-\cfoot{\thepage\ of \pageref{LastPage}}
-\begin{document}}\immediate\write#1{\temp}\endgroup}
-\catcode`\^^M=5
-
-
-%from texbook
-%\let\stoken= 
-%\long\def\unexpandedwrite#1#2{\def\finwrite{\write#1}%
-%{\aftergroup\finwrite\aftergroup{\sanitize#2\endsanity}}}
-%\def\sanitize{\futurelet\next\sanswitch}
-%\def\sanswitch{\let\n@xt\endsanity \ifx\next\endsanity
-%\else\ifcat\noexpand\next\stoken\aftergroup\space\let\n@xt=\eat
-%\else\ifcat\noexpand\next\bgroup\aftergroup{\let\n@xt=\eat
-%\else\ifcat\noexpand\next\egroup\aftergroup}\let\n@xt=\eat
-%\else\let\n@xt=\copytok\fi\fi\fi\fi \n@xt}
-%\def\eat{\afterassignment\sanitize \let\next= }
-%\long\def\copytok#1{\ifcat\noexpand#1\relax\aftergroup\noexpand\fi
-%\ifcat\noexpand#1\noexpand~\aftergroup\noexpand\fi
-%\aftergroup#1\sanitize}
-%\def\endsanity\endsanity{}
-%
-%\newcommand{\writeheader}[1]{{%
-%\immediate\unexpandedwrite#1{%
-%\documentclass[letterpaper,11pt,twoside] {article}
-%\input{header}
-%\usepackage[margin=1in]{geometry}
-%
-%\def\d{\, {\rm d}}
-%
-%\usepackage{wasysym}
-%\usepackage{pdfcomment}
-%
-%\newcommand{\cheadcontent}{8.022 Notes}
-%\newcommand{\RelativitySection}{\def\cheadcontent{8.022 Notes (Relativity)}%
-%\let\oldsection=\section
-%\def\section{\def\cheadcontent{8.022 Notes}%
-             %\let\section=\oldsection%
-             %\section}%
-%}
-%
-%\pagestyle{fancy}
-%\headheight 13.7pt
-%\fancyhead{}
-%\fancyhead{Jason Gross}%\today}
-%\fancyfoot{}
-%\lhead{Jason Gross}
-%\rhead{\TeX ed on \today}
-%\chead{\cheadcontent}
-%\cfoot{\thepage\ of \pageref{LastPage}}
-%\begin{document}}}}
-
-
-
+\cfoot{\thepage\space of \pageref{LastPage}}
+\end{preamble}
 
 \begin{document}
 
@@ -637,5 +549,111 @@
 \begin{notessection}{2}{22}{2011}
 
 \end{notessection}
+
+
+
+
+
+
+
+
+\begin{notessection}{2}{23}{2011}
+  \subsection*{Hilbert Basis Theorem}
+    A ring $A$ is Noetherian if the ideals are finitely generated.
+  
+    \begin{thm*}[Hilbert Basis Theorem]
+      If $R$ is Noetherian, then $R[x]$ is Noetherian
+    \end{thm*}
+    \begin{cor*}
+      $\mathbb C[x_1,\ldots, x_n]$ is Noetherian \\  
+      Any finite-type (finitely generated as an algebra (everything is a polynomial in finitely many things)) $\mathbb C$-algebra is Noetherian.  ($A \cong \mathbb C[x] / I$)
+    \end{cor*}
+  
+    \noindent \emph{Equivalent conditions on $A$}:
+    \begin{enumerate}
+      \item $A$ is noetherian (ideals are finitely generated)
+      \item Every infinite increasing family $I_1 \subset I_2 \subset \cdots $ of ideals becomes constant eventually
+      \item[] ($I_1 < I_2 < \cdots$ chain is finite)
+      \item Every non-empty set $S$ of ideals contains maximal elements ($\exists I \in S$ such that $I \not\subset J$ for any $J \in S$, $J \ne I$)
+    \end{enumerate}
+    \begin{cor*}
+      If $A$ is noetherian,$I$ is an ideal of $A$,  and $I < A$, then $I$ is contained in a maximal ideal.  (The maximal ideal is a maximum element in the set of ideals $< A$.)
+    \end{cor*}
+    \begin{cor*}
+      If $A$ contains no maximal ideal, then $A$ is the zero ring.
+      
+      $\spec A \ne \emptyset \iff A = \{0\}$
+    \end{cor*}
+    
+    Adjoining inverses to $A = \mathbb C[x]$ ($x = x_1, \ldots, x_n$), $B = A[g^{-1}] = \mathbb C[x, y] / (y g - 1)$.  \\
+    Then $\spec A = \mathbb A^n$, and $\spec B \approx \mathbb A^n - V(g)$.
+    
+    \begin{thm*}[Strong Nullstellensatz]
+      Let $I$ be an ideal of $\mathbb C[x]$, $g\in \mathbb C[x]$.  Suppose $g$ vanishes identically on $V(I)$.  Then $g^N \in I$ for some $N \gg 0$.
+    \end{thm*}
+    \begin{proof}
+      \emph{Idea}: Find a ring with no maximal ideal.  It is therefore the zero ring.  Play with this fact.
+      
+      Say $I = (f_1, \ldots, f_r)$, $f_i \in \mathbb C[x]$ ($x = x_1, \ldots, x_n$).  Let's inspect the locus of zeros in $\mathbb A^{n+1}_{x,y}$, $V = V(f_1, \ldots, f_r; yg - 1)$.
+      
+      If $(x^0, y^0) \in V$, then $x^0 \in V(I) = V(f_1, \ldots, f_r) \subset \mathbb A^n_x$.  Therefore $g(x^0) = 0$ (by hypothesis).  Then there is no $y^0$ such that $y^0 g(x_0) = 1$.
+      
+      Therefore, $V = \emptyset$.
+      
+      We also have that $V = \spec \mathbb C[x, y] / (f_1, \ldots, f_r, yg - 1)$.  Then $\mathbb C[x, y] / (f, yg - 1) = \{0\}$.  Therefore, $(g, yg - 1)$ is the unit ideal in $\mathbb C[x, y]$.  This means that we can write 1 as a polynomial combination of $f$ and $yg - 1$.  Say
+      $$1 = p_1(x, y)f_1(x) + \cdots + f_r(x, y) f_r(x) + q(x, y) (y g - 1).$$
+      Now work in the ring $B = \mathbb C[x][g^{-1}] = \mathbb C[x, y] / (y g - 1)$.  In $B$ $yg - 1 = 0$ and $y = g^{-1}$.  Then
+      $$1 = p_1(x, g^{-1}) f_1(x) + \cdots + p_r(x, g^{-1}) f_r(x) + 0.$$
+      Multiply by $g^N$ to clear denominators.  Then, since $g = g(x)$,
+      $$g^N = \tilde p_1(x) f_1(x) + \cdots + \tilde p_r(x) f_r(x).$$
+      Therefore, $g^N \in I$.
+    \end{proof}
+    
+    \textsc{Note}: If $I \subset J$ are ideals in $\mathbb C[x]$, then $V(I) \supseteq V(J)$.  But $V(x_1) = V(x_1^2)$.
+    
+    Let $I$ be an ideal.  Then $\operatorname{rad}I = \text{radical of }I = \mathset[g]{g^n \in I,\text{ some }n > 0}$.
+    
+    \begin{thm*}
+      $$V(I) \supset V(J) \iff I \subset \operatorname{rad}J$$
+      $$V(I) = V(J) \iff \operatorname{rad}I = \operatorname{rad} J$$
+    \end{thm*}
+    \begin{proof}
+      Say $V(I) \supset V(J)$.  Take $g\in I$.  Then $g = 0$ on $V(J)$.  Then $g^N \in J$ for some $N$ by the strong Nullstellensatz, and so $g \in \operatorname{rad} J$.
+      
+      The other direction is left as an exercise.
+    \end{proof}
+    
+    \begin{defn*}
+      Let $X$ be a topological space.  Then a closed subset $C$ is \emph{irreducible} if you can't write $C = C_1 \cup C_2$ where $C_i$ closed, $C_i < C$.
+    \end{defn*}
+    
+    $A$ a finite type algebra is noetherian, satisfies the ascending chain condition on ideals.  Then $\spec A$ has the descending chain condition on ideals.  
+    
+    \noindent \emph{Prime ideals}: Given a polynomial ring $R$: (equivalent conditions)
+    \begin{itemize}
+      \item $R / P$ is a domain
+      \item $P < R$, $ab\in P \implies a \in P$ or $b\in P$
+      \item $A$, $B$ ideals of $R$, $AB \subset P \implies A \subset P$ or $B \subset P$.  (Recall that the product ideal $AB  = \mathset[\text{finite sums }\sum a_i b_i]{a_i\in A, b_i\in B}$.)
+    \end{itemize}
+    \begin{proof}
+      (2) $\implies$ (3) \\
+      Say $AB \subset P$, but $A \subset P$. \\
+      $\exists a\in A$, $a\notin P$. \\
+      $AB \subset P \implies B \subset P$ \\
+      $\forall b\in B$, $ab\in P$, $\therefore b\in P$, so $B\subset P$.
+    \end{proof}
+    
+\end{notessection}
+
+
+
+
+
+
+\begin{notessection}{2}{25}{2011}
+
+\end{notessection}
+
+
 
 \end{document}
