@@ -1,5 +1,6 @@
 #!/bin/bash
 pushd "Notes by Day"
+(rm "18.721 Lecture Notes 11 - 2011-02-28.pdf") & (pdflatex "18.721 Lecture Notes 11 - 2011-02-28.tex") && (rm "18.721 Lecture Notes 11 - 2011-02-28.pdf") && (pdflatex "18.721 Lecture Notes 11 - 2011-02-28.tex")
 (rm "18.721 Lecture Notes 10 - 2011-02-25.pdf") & (pdflatex "18.721 Lecture Notes 10 - 2011-02-25.tex") && (rm "18.721 Lecture Notes 10 - 2011-02-25.pdf") && (pdflatex "18.721 Lecture Notes 10 - 2011-02-25.tex")
 (rm "18.721 Lecture Notes 09 - 2011-02-23.pdf") & (pdflatex "18.721 Lecture Notes 09 - 2011-02-23.tex") && (rm "18.721 Lecture Notes 09 - 2011-02-23.pdf") && (pdflatex "18.721 Lecture Notes 09 - 2011-02-23.tex")
 (rm "18.721 Lecture Notes 08 - 2011-02-22.pdf") & (pdflatex "18.721 Lecture Notes 08 - 2011-02-22.tex") && (rm "18.721 Lecture Notes 08 - 2011-02-22.pdf") && (pdflatex "18.721 Lecture Notes 08 - 2011-02-22.tex")
