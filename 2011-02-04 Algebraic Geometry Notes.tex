@@ -790,16 +790,14 @@
   For any $p\in X$,
   $$
   \xymatrix{
-    B \ar[r]^{\pi \circ p} & \mathbb C \\
-     U & \\
-    A \ar@{-->}[uur]_{\pi_p}
+    B \ar[r]^{\pi \circ p} \ar@{{}{}*{\cup}}[d] & \mathbb C \\ % fix
+    A \ar@{-->}[ur]_{\pi_p}
   }
   $$
   $Y \to X$ sends $q  \leadsto r$ \\
   $$
   \xymatrix{
-    B \ar[r]^{\sigma} \ar@/^/[rr]^{\pi} & B \ar[r]^{\pi_q} & \mathbb C \ar@{=}[dd] \\
-    U & U &  \\
+    B \ar[r]_{\sigma} \ar@{{}{}*{\cup}}[d] \ar@/^/[rr]^{\pi} & B \ar[r]_{\pi_q} \ar@{{}{}*{\cup}}[d] & \mathbb C \ar@{=}[d] \\
     A \ar[r]^{\text{id}} \ar@/_/[rr]_{\pi_p} & A \ar[r]^{\pi_p} & \mathbb C
   }
   $$
