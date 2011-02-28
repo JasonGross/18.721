@@ -676,7 +676,7 @@
     & = \text{\emph{nilradical}} \\
     & = \mathset[x]{x^n = 0}
   \end{align*}
-  The following are equivalent:
+  The following are eqivalent:
   \begin{itemize}
     \item $\rad I = P_1 \cap \cdots \cap P_k$
     \item $\rad(\bar 0) = \bar P_1 \cap \cdots \cap \bar P_k$
@@ -705,7 +705,7 @@
   \end{align*}
   \ldots
 
-  We made a mistake somewhere.  (Supposed to replace $I$ by a zero ideal?)  The version on the web is probably correct.  Let's skip this for now.
+  We made a mistake somewhere.  (Supposed to replace $I$ by a zero ideal?)  The version on the web is probaby correct.  Let's skip this for now.
 
   \end{proof}
 
@@ -751,151 +751,6 @@
 
 
 \begin{notessection}{2}{28}{2011}
-  \begin{itemize}
-    \item[] $B$ finite type, $G$ operator(?)
-    \item[] $A = B^G$
-    \item[] Showed $A$ finite type
-    \item[] $Y = \spec B$
-    \item[] $X = \spec A$
-    \item[] $X \leftrightarrow \{G\text{ orbits in }Y\}$
-    \item[] $G \times B \to B$
-    \item[] $\sigma, b \leadsto \sigma(b)$
-    \item[] (left) $\sigma \tau(b)$: first $\tau$, then $\sigma$
-    \item[] Then $G$ operates on the \emph{right} on $Y$.
-    \item[] $q\in Y$, $\sigma$ sends $q\to q^\sigma$
-    \item[] $q^{\sigma\tau}$: first $\sigma$, then $\tau$
-  \end{itemize}
-  View
-  \begin{align*}
-    y & \leftrightarrow \{\text{homomorphisms }B \to \mathbb C\} \\
-    q & \leftrightarrow \pi_q: B \to \mathbb C \\
-    & \leftrightarrow \{\text{max ideals of }B\} \\
-    q & \leftrightarrow m_q
-  \end{align*}
-  Operation on $Y$:
-  $$
-  \xymatrix{
-    B \ar[r]^\sigma \ar[dr]_{\pi \circ \sigma} & B \ar[d]^\pi \\
-                                               & \mathbb C
-  }
-  $$
-
-  $\pi_q \circ \sigma(b) = \pi_q(\sigma b)$
-
-  Define $q^\sigma = $ that point such that $\pi_{q^\sigma} = \pi_q \circ \sigma$.
-
-  \noindent \emph{Operation on max ideals}: \\
-  $\mathcal M_{q^\sigma} = \sigma^{-1}\mathcal M_q$ \\
-  $Y \to X$? \\
-  For any $p\in X$,
-  $$
-  \xymatrix{
-    B \ar[r]^{\pi \circ p} & \mathbb C \\
-     U & \\
-    A \ar@{-->}[uur]_{\pi_p}
-  }
-  $$
-  $Y \to X$ sends $q  \leadsto r$ \\
-  $$
-  \xymatrix{
-    B \ar[r]^{\sigma} \ar@/^/[rr]^{\pi} & B \ar[r]^{\pi_q} & \mathbb C \ar@{=}[dd] \\
-    U & U &  \\
-    A \ar[r]^{\text{id}} \ar@/_/[rr]_{\pi_p} & A \ar[r]^{\pi_p} & \mathbb C
-  }
-  $$
-  Therefore, $G$-orbits in $Y$ map to points of $X$.
-
-  We want to show that different orbits $\{q_1, \ldots, q_r\} \ne \{q_1', \ldots, q_s'\}$ in $Y$ map to different points $p$, $p'$ in $X$.
-
-  \begin{proof}
-    \emph{Plan}: Find an element $a\in A$ such that $a = 0$ on orbit $\{q_i\}$, $\pi_q(a) = 0$, $a \ne 0$ on orbit $\{q'_j\}$.  Then $\pi_{q'_j}(a) \ne 0$.  This would give us that $a\in \mathcal M_{q_i}$ (same as $\in \mathcal M_p$) and $a\notin \mathcal M_{q'_j}$ (same as $\notin \mathcal M_{p'}$).
-  
-    In $B$, choose $b\in \mathcal M_{q_1}$ (then ) such that $b\notin \mathcal M_{q'_j}$ for all $j = 1, \ldots, s$.  (Note: $b(q) \defeq \pi_q(b)$.)
-
-    \begin{digression}
-      Diversion: Suppose $B = \mathbb C[x_1, \ldots, x_n] / (f_1, \ldots, f_k)$.  $b$ represented by the polynomial $p(x_1, \ldots, x_n)$.  $\spec B \approx V(f_1, \ldots, f_k)$ in $\mathbb C^n$.
-
-      $\spec B = (\text{max ideals}) = (\text{homomorphisms }B \to \mathbb C) = (V(I)\text{ if }B = \mathbb C[x] / I)$)
-    \end{digression}
-    
-    We can do this. (Think about choosing (hyper-?)planes that do not pass through finite sets of points.)
-
-    Let $a = \displaystyle \prod_{\sigma\in G} \sigma(b)$.  $a$ is invariant.  $a = 0$ on $q_1$ because $b$ divides $a$ in $B$ (since some $\sigma \in G$ is the identity).  Therefore $a = 0$ on the orbit $(q_1)$.  $a \ne 0$ on $q'_1$.
-
-    $\sigma(b)$ evaluated at $q'_1$ is $\pi_{q'_1}(\sigma b) = \pi_{{q'}_1^\sigma}(b) = b$ evaluated at ${q'}_1^\sigma$.
-
-    Therefore, $a \ne 0$ on the orbit.
-  \end{proof}
-
-  \subsection{Localization}
-    Note: we always assume that the rings are domains and assume (whenever possible) that they're finite type algebras.
-
-    \begin{defn*}
-      A \emph{multiplicative system} $S$ in a domain $A$ is a subset of $A$ satisfying
-      \begin{itemize}
-        \item $1 \in S$
-        \item $0 \notin S$
-        \item if $s, t\in S$, then $st \in S$
-      \end{itemize}
-    \end{defn*}
-    \begin{defn*}
-      The elements of $S$ serve as denominators in the \emph{ring of fractions}
-      $$A_S \defeq \left.\mathset[ \frac{a}{s} ]{s\in S, a\in A}\right/\sim$$
-      where $\frac{a}{s} \sim \frac{b}{t}$ if $at = bs$
-    \end{defn*}
-    \begin{align*}
-      A & \hookrightarrow A_S \\
-      a & \leadsto a / 1
-    \end{align*}
-    \begin{example*}
-      $S = \{1, s, s^2, \ldots\}$, $s \ne 0$.  $A_S = A[s^{-1}] = A[y] / (sy - 1)$
-    \end{example*}
-    \begin{example*}
-      $S = A - \{0\}$, $A_S = $ fraction field
-    \end{example*}
-    \begin{example*}
-      $P$ a prime ideal of $A$, $S = A - P = \mathset[s]{s\notin P}$.  Then $s\notin P$, $t\notin P$ $\implies$ $st\notin P$.  Then $A_S$ is the \emph{localization of $A$ at $P$}.  This is (perversely) denoted $A_P$.
-    \end{example*}
-
-    If $A \subset B$ a subring, then we can relate ideals of $A$ and $B$: \\
-    \emph{Extended ideal}: $I^e$
-    \begin{itemize}
-      \item[] $I$ ideal of $A$
-      \item[] $IB = $ ideal of $B$ generated by $\{I\}$
-      \item[] The elements are $$\sum_{\text{finite}} x_i b_i\qquad,\ x_i\in I,\ b_i\in B$$
-    \end{itemize}
-    \emph{Contracted ideal}: $J^c$: For $J$ an ideal of $B$, $(J \cap A) = $ ideal of $A$
-
-    \begin{itemize}
-      \item[] $(I^e)^c \supset I$
-      \item[] $(J^c)^e \subset J$
-    \end{itemize}
-    
-    For $A \subset B = A_S$:
-    \begin{itemize}
-      \item[] $I^e = IA_s = \mathset[x / s]{x\in I,\ s\in S} / \sim$
-    \end{itemize}
-
-    $J^c = J \cap A$.  If $y / s\in J$, then $y\in J \cap A = J^c$.  Therefore, $y / s\in (J^c)^e$.  Thus, $J \subset (J^c)^e$, so $J = (J^c)^e$.
-
-    \begin{cor*}
-      If $A$ noetherian, then $A_S$ noetherian
-    \end{cor*}
-    \begin{proof}
-      Take an increasing sequence $J_1 \subset J_2 \subset \cdots$ of ideals in $A_S$.  Let $I_\nu = J_\nu \cap A$.  Then $I_1 \subset I_2 \subset \cdots$.  Since $A$ is noetherian, this is eventually constant.  Therefore $I_\nu^e = (J_\nu^c)^e$ eventually constant.  Thus $A_S$ is noetherian.
-    \end{proof}
-\end{notessection}
-
-
-
-
-
-
-
-
-
-
-\begin{notessection}{3}{2}{2011}
 
 \end{notessection}
 
