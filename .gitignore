@@ -17,7 +17,6 @@
 *.backup
 *.zip
 *.sec
-*.pdf
 website/*
 website/
 2009

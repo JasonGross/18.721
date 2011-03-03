@@ -22,25 +22,29 @@
 \global\filelist=\expandafter\expandafter\expandafter{\expandafter\temp\expandafter,\the\filelist}}%
 }
 \makeatletter
+\edef\bash@header{\expandafter\@gobble\detokenize{##!/bin/bash}}
 \newcommand{\writeallcompiles}{
   \immediate\openout\compileout compile-all.tex
-  \immediate\write\compileout{\expandafter\@gobble\detokenize{##!/bin/bash}}
+  \immediate\write\compileout{\bash@header}
   \immediate\write\compileout{pushd "Notes by Day"}
-  \expandafter\writecompiles\the\filelist
+  \expandafter\ifx\expandafter\relax\the\filelist
+  \else
+    \expandafter\writecompiles\the\filelist
+  \fi
   \immediate\write\compileout{popd}
   \immediate\closeout\compileout
   \immediate\write18{mv compile-all.tex compile-all.bat}
   \immediate\write18{chmod +x compile-all.bat}
 }
 
-\def\writecompiles#1,#2\relax{
-\message{Writing compilation routine for #1^^J}
-\immediate\write\compileout{(rm "#1.pdf") & (pdflatex "#1.tex") && (rm "#1.pdf") && (pdflatex "#1.tex")}
-\def\second{#2}\def\emptyarg{}
-\ifx#2\emptyarg
-\else
-  \writecompiles#2\relax
-\fi}
+\def\writecompiles#1,#2\relax{%
+  \message{Writing compilation routine for #1^^J}
+  \immediate\write\compileout{(rm "#1.pdf") & (pdflatex "#1.tex") && (rm "#1.pdf") && (pdflatex "#1.tex")}%
+  \def\second{#2}\def\emptyarg{}%
+  \ifx#2\emptyarg
+  \else
+    \writecompiles#2\relax
+  \fi}
 
 
 \newcommand{\compileallfiles}{
@@ -61,9 +65,64 @@
 
 \makeatletter
 
+% aggregates TeX into a command
+\newenvironment{verbatimgappto}[1]{%
+  \begingroup% Lets Keep the Changes Local
+    \@bsphack
+    \let\do\@makeother\dospecials\catcode`\^^M\active
+    \def\verbatim@processline{\expandnext{\gappto#1}{\the\verbatim@line^^J}}%
+    \verbatim@start
+}{\@esphack\endgroup}
+
+\newwrite\readfile@in
+\newcommand{\appfileto}[2]{%
+  \expandaftercmds{%
+    \endlinechar\expandafter\m@ne
+    \immediate\openin\readfile@in #1\relax
+    \@appfileto{#2}%
+    \immediate\closein\readfile@in
+    \endlinechar
+  }{\the\endlinechar}\relax
+}
+\newcommand{\@appfileto}[1]{%
+  \read\readfile@in to\next
+  \ifeof\readfile@in
+  \else
+    \expandafter\appto\expandafter#1\expandafter{\next}%
+    \expandaftercmds{\@appfileto{#1}}%
+  \fi
+}
+
+\newwrite\copy@out
+\newread\copy@in
+\newcommand{\copyfile}[2]{%
+  \begingroup
+    \endlinechar-1
+    \openin\copy@in#1\relax
+    \immediate\openout\copy@out#2\relax
+    \unless\ifeof\copy@in
+      \loop
+        \readline\copy@in to\copy@line
+        \immediate\write\copy@out{\expandafter\detokenize\expandafter{\copy@line}}%
+      \unless\ifeof\copy@in\repeat
+    \fi
+    \immediate\closeout\copy@out
+    \immediate\closein\copy@in
+  \endgroup
+}%
+
+\newcommand{\iffilessame}[2]{%
+  \appfileto{#1}{\@firstfile}%
+  \appfileto{#2}{\@secondfile}%
+  \ifx\@firstfile\@secondfile
+    \expandafter\@firstoftwo
+  \else
+    \expandafter\@secondoftwo
+  \fi
+}
 
 %================ writing to this ===============
-\newcommand{\notes@pre@writetothis}{\gdef\notes@curcode{}}%\immediate\openout\esgpset@tempout\esgpset@tempfilename
+\newcommand{\notes@pre@writetothis}[1][]{\gdef\notes@curcode{#1}}%\immediate\openout\esgpset@tempout\esgpset@tempfilename
 \newcommand{\notes@do@writetothis}[1]{\expandnext{\gappto\notes@curcode}{#1^^J}}%\immediate\write\esgpset@tempout{\unexpanded{#1}}
 \newcommand{\notes@post@writetothis}{\expandnext{\scantokens}{\notes@curcode}}%\immediate\closeout\esgpset@tempout\input{\esgpset@tempfilename}%
 %================================================
@@ -72,21 +131,33 @@
 \newenvironment{preamble}{%
   \begingroup% Lets Keep the Changes Local
     \notes@pre@writetothis
+    \gdef\notes@header{}
     \@bsphack
     \let\do\@makeother\dospecials\catcode`\^^M\active
-    \def\verbatim@processline{\notes@do@writetothis{\the\verbatim@line}}%
+    \def\verbatim@processline{%
+      \notes@do@writetothis{\the\verbatim@line}%
+      \ExpandNext{\gappto\notes@header}{\expandafter\detokenize\expandafter{\the\verbatim@line}^^J}%
+    }%
     \verbatim@start
-}{\@esphack\endgroup\global\let\notes@header=\notes@curcode\aftergroup\notes@post@writetothis\relax}
+}{\@esphack\endgroup\aftergroup\notes@post@writetothis\relax}
 \newcommand{\writeheader}[1]{%
   \immediate\write#1{\detokenize{\documentclass[letterpaper,11pt,twoside]{article}}}%
   \immediate\write#1{\detokenize{\input{header-small}}}%
   \immediate\write#1{\notes@header}%
   \immediate\write#1{\detokenize{\begin{document}}}%
 }
+%\newcommand{\gappheader}[1]{%
+  %\xappto#1{%
+    %\detokenize{\documentclass[letterpaper,11pt,twoside]{article}}^^J%
+    %\detokenize{\input{header-small}}^^J%
+  %}%
+  %\expandnext{\gappto#1}{\notes@header^^J}%
+  %\xappto#1{\detokenize{\begin{document}}^^J}%
+%}
 %================================================
 
-
 \newwrite\notes@section@write
+\edef\notes@filenametemp{\jobname.sec}
 \newenvironment{notessection}[3]{%
   \addtocounter{notes-file-number}{1}%
   \edef\notes@filenamepart{\classnumber\space Lecture Notes \twodigit{\value{notes-file-number}} - #3-\twodigit{#1}-\twodigit{#2}}%
@@ -107,22 +178,29 @@
     \or November%
     \or December%
     \fi\space #2, #3}%
-  \immediate\openout\notes@section@write\notes@filename
-  \writeheader{\notes@section@write}%
+  \immediate\openout\notes@section@write\notes@filenametemp\relax
+  \writeheader\notes@section@write%
   \begingroup% Lets Keep the Changes Local
-    \edef\temp{\noexpand\noexpand\noexpand\setcounter{section}{\the\value{section}}\noexpand\section{\expandafter\noexpand\sectiontext}}
+    \ExpandNext{\def\temp}{\expandnext{\expandnext{\noexpand\noexpand\setcounter{section}}{\the\value{section}}\section}{\sectiontext}}%
     \notes@pre@writetothis
     \@bsphack
     \let\do\@makeother\dospecials\catcode`\^^M\active
     \def\verbatim@processline{%
-      \immediate\write\notes@section@write{\the\verbatim@line}%
-      \notes@do@writetothis{\the\verbatim@line}}%
+      \notes@do@writetothis{\the\verbatim@line}%
+      \immediate\write\notes@section@write{\the\verbatim@line}}%
     \expandafter\verbatim@start
     \temp}%
-{\immediate\write\notes@section@write{\detokenize{\end{document}}}%
- \immediate\closeout\notes@section@write\@esphack\endgroup%
- \compilefilepart{\notes@filenamepart}%
- \aftergroup\notes@post@writetothis\relax
+{\immediate\write\notes@section@write{\noexpand\end{document}}%
+  \immediate\closeout\notes@section@write
+ \@esphack\endgroup
+ \iffilessame{\notes@filenametemp}{\notes@filename}{%
+   \message{\notes@filenamepart\space found to have not changed.^^J}%
+ }{%
+    \message{\notes@filenamepart\space found to have changed.  Updating it...^^J}%
+    \copyfile{\notes@filenametemp}{\notes@filename}%
+    \compilefilepart{\notes@filenamepart}%
+ }%
+  \aftergroup\notes@post@writetothis\relax
 }%
 
 \begin{preamble}
