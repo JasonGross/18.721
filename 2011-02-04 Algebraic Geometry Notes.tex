@@ -1,6 +1,21 @@
 \documentclass[letterpaper,11pt,twoside]{article}
-\usepackage{etextools,verbatim}
+\usepackage{etextools,pdftexcmds,verbatim}
 \input{header}
+
+\makeatletter
+\newwrite\@tempwritea
+\newif\if@shellescape
+\def\@testfilename{\jobname.18}
+\immediate\openout\@tempwritea\@testfilename\relax
+\immediate\write\@tempwritea{Testing for rm on shell escape}%
+\immediate\closeout\@tempwritea\relax
+\IfFileExists\@testfilename{%
+  \immediate\write18{rm \@testfilename}%
+  \IfFileExists\@testfilename{\@shellescapefalse}{\@shellescapetrue}%
+}{%
+  \PackageError{testwrite18}{Weird error, no file.}{I tried to make a file, and it failed.}%
+}
+\newcommand{\ifshellescape}{\if@shellescape\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi}
 
 %============== Copy Diagrams ======================
 \write18{mkdir "Notes by Day"}
@@ -13,49 +28,39 @@
 
 %========================= Compilation ============================
 \newwrite\compileout
-\newtoks\filelist
-\filelist={\relax}
-
+\def\filelist{}
 
 \newcommand{\compilefilepart}[1]{%\write18{(pushd Notes by Day) & (rm "#1.pdf") & (pdflatex "#1.tex") & (rm "#1.pdf") & (pdflatex "#1.tex") & (popd)}
-{\edef\temp{#1}
-\global\filelist=\expandafter\expandafter\expandafter{\expandafter\temp\expandafter,\the\filelist}}%
+  \csvlistxadd{\filelist}{#1}%
 }
 \makeatletter
-\edef\bash@header{\expandafter\@gobble\detokenize{##!/bin/bash}}
-\newcommand{\writeallcompiles}{
-  \immediate\openout\compileout compile-all.tex
-  \immediate\write\compileout{\bash@header}
-  \immediate\write\compileout{pushd "Notes by Day"}
-  \expandafter\ifx\expandafter\relax\the\filelist
-  \else
-    \expandafter\writecompiles\the\filelist
-  \fi
-  \immediate\write\compileout{popd}
+\edef\bash@header{\expandafter\@gobble\detokenize{#!/bin/bash}}
+\newcommand{\writeallcompiles}{%
+  \immediate\openout\compileout compile-all.tex\relax
+  \immediate\write\compileout{\bash@header}%
+  \immediate\write\compileout{pushd "Notes by Day"}%
+  \forcsvloop\filelist\do{%
+    \message{Writing compilation routine for ##1^^J}%
+    \immediate\write\compileout{(rm "##1.pdf") & (pdflatex "##1.tex") && (rm "##1.pdf") && (pdflatex "##1.tex")}%
+    \immediate\write\compileout{cp -f "##1.tex" "##1.tex.old"}%
+    \immediate\write\compileout{copy /y "##1.tex" "##1.tex.old"}%
+  }%
+  \immediate\write\compileout{popd}%
   \immediate\closeout\compileout
-  \immediate\write18{mv compile-all.tex compile-all.bat}
-  \immediate\write18{chmod +x compile-all.bat}
+  \immediate\write18{mv compile-all.tex compile-all.bat}%
+  \immediate\write18{chmod +x compile-all.bat}%
 }
-
-\def\writecompiles#1,#2\relax{%
-  \message{Writing compilation routine for #1^^J}
-  \immediate\write\compileout{(rm "#1.pdf") & (pdflatex "#1.tex") && (rm "#1.pdf") && (pdflatex "#1.tex")}%
-  \def\second{#2}\def\emptyarg{}%
-  \ifx#2\emptyarg
-  \else
-    \writecompiles#2\relax
-  \fi}
 
 
 \newcommand{\compileallfiles}{
-\immediate\write18{echo Copying diagrams...} %^^J
-\immediate\write18{copy /y *-*-*_Diagram_*.pdf "Notes by Day/"}
-\immediate\write18{cp -f *-*-*_Diagram_*.pdf "Notes by Day/"}
-\message{Writing compilation routines...^^J}
-\writeallcompiles
-\immediate\write18{echo Compiling files...}%^^J}
-\immediate\write18{start compile-all.bat}
-\immediate\write18{bash compile-all.bat}
+  \immediate\write18{echo Copying diagrams...}%^^J
+  \immediate\write18{copy /y *-*-*_Diagram_*.pdf "Notes by Day/"}%
+  \immediate\write18{cp -f *-*-*_Diagram_*.pdf "Notes by Day/"}%
+  \message{Writing compilation routines...^^J}%
+  \writeallcompiles
+  \immediate\write18{echo Compiling files...}%^^J}
+  \immediate\write18{start compile-all.bat}%
+  \immediate\write18{bash compile-all.bat}%
 }
 \AtBeginDocument{\AtEndDocument{\compileallfiles}}
 
@@ -79,18 +84,13 @@
   \expandaftercmds{%
     \endlinechar\m@ne
     \immediate\openin\readfile@in #1\relax
-    \@appfileto{#2}%
+    \loop \unless\ifeof\readfile@in
+      \readline\readfile@in to\next
+      \expandnext{\gappto{#2}}{\next}%
+    \repeat
     \immediate\closein\readfile@in
     \endlinechar
   }{\the\endlinechar}\relax
-}
-\newcommand{\@appfileto}[1]{%
-  \read\readfile@in to\next
-  \ifeof\readfile@in
-  \else
-    \expandafter\appto\expandafter#1\expandafter{\next}%
-    \expandaftercmds{\@appfileto{#1}}%
-  \fi
 }
 
 \newwrite\copy@out
@@ -131,7 +131,7 @@
 \newenvironment{preamble}{%
   \begingroup% Lets Keep the Changes Local
     \notes@pre@writetothis
-    \gdef\notes@header{}
+    \gdef\notes@header{}%
     \@bsphack
     \let\do\@makeother\dospecials\catcode`\^^M\active
     \def\verbatim@processline{%
@@ -156,15 +156,8 @@
 %}
 %================================================
 
-\newwrite\notes@section@write
-\edef\notes@filenametemp{\jobname.sec}
-\newenvironment{notessection}[3]{%
-  \addtocounter{notes-file-number}{1}%
-  \edef\notes@filenamepart{\classnumber\space Lecture Notes \twodigit{\value{notes-file-number}} - #3-\twodigit{#1}-\twodigit{#2}}%
-  \edef\notes@filename{"Notes by Day/\notes@filenamepart.tex"}%
-  \computedayofweek{#2}{#1}{#3}%
-  \edef\sectiontext{\dayofweeknameid{\dayofweek}, 
-    \ifcase#1\relax
+\newcommand{\@monthname}[1]{%
+  \ifcase#1\relax
     \or January%
     \or February%
     \or March%
@@ -177,11 +170,21 @@
     \or October%
     \or November%
     \or December%
-    \fi\space #2, #3}%
+  \fi
+}
+\newwrite\notes@section@write
+\edef\notes@filenametemp{\jobname.sec}
+\newenvironment{notessection}[3]{%
+  \addtocounter{notes-file-number}{1}%
+  \edef\notes@filenamepart{\classnumber\space Lecture Notes \twodigit{\value{notes-file-number}} - #3-\twodigit{#1}-\twodigit{#2}}%
+  \edef\notes@filename{"Notes by Day/\notes@filenamepart.tex"}%
+  \edef\notes@filenameold{"Notes by Day/\notes@filenamepart.tex.old"}%
+  \computedayofweek{#2}{#1}{#3}%
+  \edef\sectiontext{\dayofweeknameid{\dayofweek}, \@monthname{#1}\space #2, #3}%
   \immediate\openout\notes@section@write\notes@filenametemp\relax
   \writeheader\notes@section@write%
   \begingroup% Lets Keep the Changes Local
-    \ExpandNext{\def\temp}{\expandnext{\expandnext{\noexpand\noexpand\setcounter{section}}{\the\value{section}}\section}{\sectiontext}}%
+    \edef\temp{\detokenize{\setcounter{section}}{\the\value{section}}\detokenize{\section}{\sectiontext}}%
     \notes@pre@writetothis
     \@bsphack
     \let\do\@makeother\dospecials\catcode`\^^M\active
@@ -193,12 +196,16 @@
 {\immediate\write\notes@section@write{\noexpand\end{document}}%
   \immediate\closeout\notes@section@write
  \@esphack\endgroup
- \iffilessame{\notes@filenametemp}{\notes@filename}{%
+ \iffilessame{\notes@filenametemp}{\notes@filenameold}{%
    \message{\notes@filenamepart\space found to have not changed.^^J}%
  }{%
-    \message{\notes@filenamepart\space found to have changed.  Updating it...^^J}%
-    \copyfile{\notes@filenametemp}{\notes@filename}%
-    \compilefilepart{\notes@filenamepart}%
+    \ifshellescape{%
+      \message{\notes@filenamepart\space found to have changed.  Updating it...^^J}%
+      \copyfile{\notes@filenametemp}{\notes@filename}%
+      \compilefilepart{\notes@filenamepart}%
+    }{%
+      \message{\string\write18 not enabled.  Not updating .tex files.^^J}%
+    }%
  }%
   \aftergroup\notes@post@writetothis\relax
 }%
@@ -231,8 +238,9 @@
 \rhead{\TeX ed on \today}
 \chead{\cheadcontent}
 \cfoot{\thepage\space of \pageref{LastPage}}
-\end{preamble}
 
+\newcommand{\flag}[2][]{#2\footnote{#1}}
+\end{preamble}
 \begin{document}
 
 \begin{notessection}{2}{4}{2011}
@@ -1055,14 +1063,14 @@
     \begin{align*}
       x_i & = \sum_j p_{ij}x_j & p_{ij}\in I \\
       X  & = PX  & P\text{ matrix }(p_{ij}) \\
-      (\mathbb 1 - P)X & = 0  \\
-      Q(\mathbb 1 - P) = \delta \mathbb 1
+      (\mathbb{I} - P)X & = 0  \\
+      Q(\mathbb{I} - P) = \delta \mathbb{I}
     \end{align*}
-    where $Q$ is the cofactor matrix for $\mathbb 1 - P$ with entries in $A$, and $\delta = \det(\mathbb 1 - P)$.
+    where $Q$ is the cofactor matrix for $\mathbb{I} - P$ with entries in $A$, and $\delta = \det(\mathbb{I} - P)$.
     \begin{align*}
-      Q(\mathbb 1 - P)X & = 0 \\
+      Q(\mathbb{I} - P)X & = 0 \\
       \therefore \delta X = 0 \\
-      \mathbb 1 - P & = \begin{pmatrix} 1 - p_{11} & \cdots&  \\ & \ddots & \\ && 1 - p_{nn} \end{pmatrix} \\
+      \mathbb{I} - P & = \begin{pmatrix} 1 - p_{11} & \cdots&  \\ & \ddots & \\ && 1 - p_{nn} \end{pmatrix} \\
       \delta & = 1 - z
     \end{align*}
     Since the $p_{ij} \in I$, we have $z\in I$.  Then $(1 - z)X = 0$, so $(1 - z)$ kills $M$.
@@ -1085,12 +1093,102 @@
 
 
 
+\begin{notessection}{3}{4}{2011}
+  \subsection*{Integral Extensions}
+    \noindent $A \subset B$ domains \\
+    \begin{defn*}
+      $b\in B$ is \emph{integral over $A$} if it's a root of a monic polynomial.\\
+      $f(x) = x^n - a_1 x^{n-1} + \cdots \pm a_r$ coefficients in $A$ \\
+    \end{defn*}
+    \begin{prop*}
+      The following are equivalent:
+      \begin{enumerate}[(1)]
+        \item $b$ is integral over $A$
+        \item $A[b]$ is a finite $A$-module
+        \item There exists an $A[b]$-module $M$ which:
+          \begin{enumerate}[(i)]
+            \item is faithful\footnote{A module is faithful if for any $z\in A[b]$, $z\ne 0$, $zM \ne 0$.} as an $A[b]$-module
+            \item is a finite $A$-module
+          \end{enumerate}
+      \end{enumerate}
+    \end{prop*}
+    \begin{proof}
+      \begin{itemize}
+        \item[$(1) \implies (2)$] Clear
+        \item[$(2) \implies (3)$] Clear
+        \item[$(3) \implies (1)$] Take the generators for $M$ as an $A$-module, $(v_1, \ldots, v_n)$.  Then $bv_i = \sum a_{ij} v_j$ for $a_{ij} \in A$.  We can write this as
+          $$(b \mathbb{I} - A) V = 0\qquad V = \begin{pmatrix} v_1 \\ \vdots \\ v_n\end{pmatrix}$$
+          Let $C$ be the coefficient matrix of $(b \mathbb{I} - A)$.  Then $C(b \mathbb{I} - A) = \det(b\mathbb{I} - A)\mathbb{I}$.  Let $\delta \defeq \det(b\mathbb{I} - A)$.  Then $\delta V = 0$.  Since $M$ is faithful, $\delta = 0$.)  Expanding $\delta$ gives $\delta = b^n - (\tr A)b^{n-1} + \cdots \pm \det A$ is a monic polynomial for $b$.  The coefficients are in $A$, so $A[b]$ is integral.
+      \end{itemize}
+    \end{proof}
+    \begin{prop*}
+      Let $A$ be noetherian.  
+      \begin{itemize}
+        \item If $B$ is generated as an $A$-algebra by elements integral over $A$, then every element of $B$ is integral over $A$.
+        \item If $B$ is generated over $A$ by a finite number of integral elements, then $B$ is a finite $A$-module.  (e.g., $B$ integral over $A$ and a finite type $\mathbb C$-algebra.)
+      \end{itemize}
+    \end{prop*}
+    \begin{proof}
+      Take $z\in B$.  Then $z \in A[b_1, \ldots, b_k]$ for $b_i$ integral.  $A[b_1, \ldots, b_k]$ is a finite $A$-module.  Therefore $A[z]$ is contained in a finite module, so it itself is finite.
+    \end{proof}
+    \begin{prop*}[Noether Normalization]
+      \flag[I'm still confused by this statement.]{
+      Let $K$ be a field, and let $A$ be a finite-type $K$-algebra and a domain.  There exist $y_1, \ldots, y_d\in A$ algebraically independent\footnote{There are no polynomial relations among them.}, and $A$ is a finite module over $K[y_1, \ldots, y_d]$.
+      }
+    \end{prop*}
+    $$
+    \xymatrix{
+      A & \spec A \ar[d] \\
+      \mathbb C[y_1, \ldots, y_d] \ar@{^{(}->}[u] & \mathbb A^d
+    }
+    $$
+    \begin{proof}
+      Given $A$ generated by $x_1, \ldots, x_n$ (some finite set).  Independent on $n$.(???)
+      If $x_1$, \ldots, $x_n$ dependent, there exists a polynomial relation $f(x_1, \ldots, x_n) = 0$ of degree $d$.  Let $h(x)$ be the degree $d$ part of $f$.  Then $h(0,0,0,\ldots, 1) = $ coefficient of $x_n^d$ in $h$ and in $f$.  If the coefficient of $x_n^d \ne 0$, then $f(x)$ looks like $cx_n^d + g_{n-1}(x_1, \ldots, x_{n-1}^{d-1} + \cdots + g_0(x_1, \ldots, x_{n-1})$.  If $c \ne 0$, this is a monic polynomial of which $x_n$ is a root, and its coefficients are in the ring $K[x_1, \ldots, x_{n-1}]$.  Therefore, $x_n$ is integral over $K[x_1, \ldots, x_{n-1}]$.  By induction, we get a tower of integral extensions.
+      
+      If $c = 0$, then make a change of variables $x_i \mapsto x_i + u_i x_n$ (for $i < n$), $x_n \mapsto u_n x_n$.  Now the coefficient of $x_n^d$ will be $h(x_1 + u_1x_n, \ldots, x_{n-1} + u_{n-1}x_{n-1}, u_n x_n)|_{x_1 = \cdots = x_{n-1} = 0,\ x_n = 1} = h(u_1, \ldots, u_n)$.  This is non-zero for most choices of $u_i$.\footnote{For fields with finite characteristic, you'll have to make a non-linear change of variables.}
+    \end{proof}
+    \begin{cor*}[A version of Nullstellensatz]
+      Let $K$ be a field, $B$ a finite-type $K$-algebra that is also a field.  Then $B$ is a finite $K$-module.
+    \end{cor*}
+    \begin{digression}
+      It follows, without much trouble, from this that if $K = \mathbb C$, $B = \mathbb C$, too; if $B$ is a finite field extension of $\mathbb C$, then $B = \mathbb C$.
+      \begin{proof}
+        Take $b\in B$.  $\mathbb C[b]$ is a finite $\mathbb C$-module.  Therefore, $b$ is a root of an irreducible polynomial with coefficients in $\mathbb C$.  Therefore, it is a root of a linear polynomial over $\mathbb C$, so $b\in \mathbb C$.
+      \end{proof}
+    \end{digression}
+    \begin{proof}
+      Noether Normalization says $B$ a finite module over polynomial ring $A = K[y_1, \ldots, y_d]$.  If $d = 0$, then we're done.  If $d > 0$, then $y_1\in A, B$, so $\frac{1}{y_1} \in B$.  Thus $B$ is a field.  But $\frac{1}{y_1}$ is not integral over $K[y_1, \ldots, y_d]$.
+    \end{proof}
+    
+    If $A$ is a domain with fraction field $K$, then $A$ is \emph{integrally closed} in $K$ if every element of $K$ which is integral over $A$ is an element of $A$.
+    \begin{example*}
+      $A = \mathbb C[x, y] / (y^2 - x^3)$.  This is not integrally closed: Let $z = \frac{y}{x}$.  \\
+      Then $z^2 = \frac{y^2}{x^2} = \frac{x^3}{x^2} = x$.  \\
+      $z^3 = \frac{y^3}{x^3} = \frac{x^3y}{x^3} = y$.  \\
+      $z$ is a root of the monic polynomial $z^2 - x$, and of $z^3 - y$.
+    \end{example*}
+    
+    \begin{thm*}
+      Let $A$ be a finite-type algebra and a domain, and let $K$ be the fraction field of $A$.  Then the \emph{integral closure} of $A$ in $K$, the set of integral elements, is a finite $A$-module.
+    \end{thm*}
+    
+    \noindent Preview:  \\
+    Given an $A$-module $M$, then $M^* \defeq \hom_A (M, A)$ is also an $A$-module.
+    
+    If $M \subset N$, then $M^* \supset N^*$ (in good situations).
+\end{notessection}
+
+
+
+
+
+
+
+
+
+
 \begin{notessection}{3}{7}{2011}
-  %\begin{cor*}
-    %If $M$ is a finite module, and $(v_1, \ldots, v_r$ are elements of $M$.
-  %\end{cor*}
-  %\begin{proof}
-  %\end{proof}
 
 \end{notessection}
 

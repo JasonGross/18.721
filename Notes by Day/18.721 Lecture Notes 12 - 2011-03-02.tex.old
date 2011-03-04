@@ -1,0 +1,136 @@
+\documentclass [letterpaper,11pt,twoside]{article}
+\input {header-small}
+\usepackage[margin=1in]{geometry}
+
+\usepackage{cancel}
+% email to abhinav@math.mit.edu
+\def\d{\, {\rm d}}
+
+%\usepackage{pgf,tikz}
+%\usetikzlibrary{arrows}
+\usepackage{wasysym}
+\usepackage{pdfcomment}
+
+\usepackage{datetime}
+\usepackage{verbatim}
+\usepackage[all]{xy}
+\def\classnumber{18.721}
+\def\classname{Algebraic Geometry}
+\edef\cheadcontent{\classnumber\space Notes}
+
+\pagestyle{fancy}
+\headheight 13.7pt
+\fancyhead{}
+\fancyhead{Jason Gross}%\today}
+\fancyfoot{}
+\lhead{Jason Gross}
+\rhead{\TeX ed on \today}
+\chead{\cheadcontent}
+\cfoot{\thepage\space of \pageref{LastPage}}
+
+\newcommand{\flag}[2][]{#2\footnote{#1}}
+
+\begin {document}
+\setcounter {section}{11}\section {Wednesday, March 2, 2011}
+  \begin{itemize}
+    \item[] $S$ a multiplicative system
+    \item[] $1\in S$
+    \item[] $0\in S$
+    \item[] $S_1, S_2\in S \implies S_1S_2\in S$.
+    \item[] Ring of fractions $A_S$ localized ring
+    \item[] $A \hookrightarrow A_S$
+    \item[] $(J^c)^e = J$
+    \item[] $(A \cap J)A_S$
+  \end{itemize}
+
+  Localizing prime ideal (s...?)
+
+  $I$ ideal of $A$, $I \cap S \ne \emptyset\ \implies I^e = $ unit ideal of $A_S$
+  \begin{prop*}
+    $P$ prime ideal of $A$.  $P \cap S \ne \emptyset$.  Then
+    \begin{itemize}
+      \item $(P^e)^c = P$
+      \item $P^e$ ( $ = P_S$) is a prime ideal of $A_S$
+      \item[] $P^e = PA_S = \mathset[s^{-1} x]{x\in P}$
+    \end{itemize}
+  \end{prop*}
+  \begin{proof}
+    For any ideal $P$, $(P^e)^c \supset P$.
+
+    We want to show $\subset$.  Let $z\in (P^e)^c$.  Then $z = s^{-1}x$ for some $x\in P$, and $z\in A$.  Then $sz = ss^{-1}x = x \in P$.  Since $P$ is prime, and $s\notin P$, $z\in P$, and so $(P^e)^c \subset P$.
+
+    Now we show that $P^e$ is prime: \\
+    We have that $z_1z_2 \in P^e$ for $z_i \in A_S$.  Then $z_1 = s_1^{-1}a_1$, $z_2 = s^{-1}_2 a_2$.  Then $z_1z_2 = (s_1s_2)^{-1}(a_1a_2) \in P^e$.  Therefore $(s_1s_2)(z_1z_2) = a_1a_2 \in P^e$.  Since $a_1a_2 \in A$, this is also in $(P^e)^c = P$.  Since $a_1a_2 \in P$ and $P$ prime, either $a_1\in P$ or $a_2\in P$, $s_1^{-1} a_1 \in P^e$ or $s_2^{-1}a_2\in P^e$.\footnote{Sorry if this proof is unclear.  I was trailing behind Prof. Artin, and so wasn't understanding the proof well.}
+  \end{proof}
+
+  $$P\spec A_S \longleftrightarrow \text{subset of }P\spec A = \mathset[P]{P\cap S\ne \emptyset}$$
+
+  Back to the case where $P$ is a prime ideal of $A$ and $S = A - P = \mathset[s\in A]{s\notin P}$. \\
+  Write $A_P$ for $A_S$.  If $I$ is an ideal of $A$, $I_P = I_S$ extended ideal.
+
+  \begin{prop*}
+    $P_P$ is a maximal ideal of $A_P$ and it is the only maximal ideal of $A_P$.
+  \end{prop*}
+  \begin{lem*}
+    For a ring $R$, the following are equivalent:
+    \begin{enumerate}[(1)]
+      \item $R$ has a unique maximal ideal $\mathfrak M$
+      \item The elements of $R$ that are not invertible form an ideal
+    \end{enumerate}
+  \end{lem*}
+  \begin{proof}
+    \begin{itemize}
+      \item[$(2)\implies (1)$] Suppose that the non-units form an ideal $I$.  Then $R / I$ is a field because every element is the residue of a unit, and therefore invertible.  Thus $I$ is a maximal ideal.  Since any other element is a unit, we cannot include any other element without turning the ideal into the entire ring.  Thus, this is maximal.
+      \item[$(1) \implies (2)$]  Suppose there exists a unique maximal ideal $\mathfrak M$.  Let $u\in R$.  Then $(u) = R$ if and only if $u$ is a unit.  If $u$ is not a unit, then $(u) < R$, and so $(u) \subset$ some maximal ideal.\footnote{If $R$ is not noetherian, this requires Zorn's Lemma/The Axiom of Choice.}  Then $(u) \subset \mathfrak M$.  Then $\mathfrak M$ contains all the non-invertible elements, and so the non-invertible elements of $R$ form an ideal (in particular $\mathfrak M$).
+    \end{itemize}
+  \end{proof}
+  \begin{proof}[Proposition above]
+    \noindent $s^{-1}a \in A_P$, $s\notin P$. \\
+    If $a\in P$, then $s^{-1}a\in P_P$.  If $a\notin P$, then $s^{-1}a$ is invertible, and so $a^{-1}s \in A_S$.
+  \end{proof}
+  \begin{defn*}
+    A (noetherian) ring $R$ is \emph{local} if it has a unique maximal ideal $\mathfrak M$.  (Note that $R / \mathfrak M$ is a field.)
+  \end{defn*}
+  \begin{example*}
+    $A = \mathbb C[x, y]$.  The prime ideals are
+    \begin{itemize}
+      \item $(0)$
+      \item $(f(x, y))$ for $f$ irreducible
+      \item maximal ideal $\mathfrak M_{(a, b)} = (x - a, y - b) \longleftrightarrow (a, b) \in \mathbb C^2$
+    \end{itemize}
+    \begin{itemize}
+      \item[] $A_{(0)}$: fraction field $\mathbb C(x, y)$ of $\mathbb C[x, y]$
+      \item[] $A_{\mathfrak M_{(a, b)}}$: a local ring.  The prime ideals $\pspec A_{\mathfrak M} = \mathset[P]{P\cap S\ne \emptyset} = \mathset[P]{P\subset \mathfrak M} = \begin{cases} (0) & \\ P = (f)\,|\,f(a, b) = 0 & \\ \mathfrak M_{(a, b)} & \end{cases}$
+    \end{itemize}
+  \end{example*}
+  \begin{lem*}
+    %\begin{itemize}
+      %\item
+    Suppose $I$ is an ideal of the ring $A$ and $M$ is a finite $A$-module such that $M = I M$.  Then there exists a $z\in I$ such that $(1 - z)M = 0$.
+  \end{lem*}
+  \begin{proof}
+    Say $(x_1, \ldots, x_r$ generate $M$.  We can write $x_i$ as a combination of $\{x_1, \ldots, x_r\}$ with coefficients in $I$:
+    \begin{align*}
+      x_i & = \sum_j p_{ij}x_j & p_{ij}\in I \\
+      X  & = PX  & P\text{ matrix }(p_{ij}) \\
+      (\mathbb{I} - P)X & = 0  \\
+      Q(\mathbb{I} - P) = \delta \mathbb{I}
+    \end{align*}
+    where $Q$ is the cofactor matrix for $\mathbb{I} - P$ with entries in $A$, and $\delta = \det(\mathbb{I} - P)$.
+    \begin{align*}
+      Q(\mathbb{I} - P)X & = 0 \\
+      \therefore \delta X = 0 \\
+      \mathbb{I} - P & = \begin{pmatrix} 1 - p_{11} & \cdots&  \\ & \ddots & \\ && 1 - p_{nn} \end{pmatrix} \\
+      \delta & = 1 - z
+    \end{align*}
+    Since the $p_{ij} \in I$, we have $z\in I$.  Then $(1 - z)X = 0$, so $(1 - z)$ kills $M$.
+  \end{proof}
+  \begin{lem*}[Nakayama Lemma]
+    Let $A$ be a local ring with a maximal ideal $\mathfrak M$, and let $M$ be a finite $A$-module.  If $M = \mathfrak M M$, then $M = 0$.
+  \end{lem*}
+  \begin{proof}
+    Take $z\in \mathfrak M$.  We have a $z$ with $(1 - z)M = 0$.  Since $1 - z \notin \mathfrak M$, $1 - z$ is invertible, and so $M = 0$ (since we can multiply by $(1 - z)^{-1}$).
+  \end{proof}
+
+\end {document}
+

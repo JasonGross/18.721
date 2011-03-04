@@ -1,0 +1,116 @@
+\documentclass [letterpaper,11pt,twoside]{article}
+\input {header-small}
+\usepackage[margin=1in]{geometry}
+
+\usepackage{cancel}
+% email to abhinav@math.mit.edu
+\def\d{\, {\rm d}}
+
+%\usepackage{pgf,tikz}
+%\usetikzlibrary{arrows}
+\usepackage{wasysym}
+\usepackage{pdfcomment}
+
+\usepackage{datetime}
+\usepackage{verbatim}
+\usepackage[all]{xy}
+\def\classnumber{18.721}
+\def\classname{Algebraic Geometry}
+\edef\cheadcontent{\classnumber\space Notes}
+
+\pagestyle{fancy}
+\headheight 13.7pt
+\fancyhead{}
+\fancyhead{Jason Gross}%\today}
+\fancyfoot{}
+\lhead{Jason Gross}
+\rhead{\TeX ed on \today}
+\chead{\cheadcontent}
+\cfoot{\thepage\space of \pageref{LastPage}}
+
+\newcommand{\flag}[2][]{#2\footnote{#1}}
+
+\begin {document}
+\setcounter {section}{2}\section {Wednesday, February 9, 2011}
+  \subsection{Curves in \texorpdfstring{$\mathbb P^2$}{ℙ²}}
+    Curves in $\mathbb P^2$ are defined by homogeneous irreducible polynomials $f$: $C = V(f)$.
+
+    e.g., the line containing a pair of points $(p, q)\in \mathbb P^2$ is the set of points $up + vq$ for $(u, v) \ne (0, 0)$.
+    It's equation $Ax = 0$ is obtained by solving $A p = $, $A q = 0$.  (Think of $A = (a, b, c)$, $p = (x_1, y_1, z_1)$, $q = (x_2, y_2, z_2)$.  Then $ax_1 + by_1 + cz_1 = 0$, $a x_2 + by_2 + cz_2 = 0$. Then $\begin{bmatrix} x_1 & y_1 & z_1 \\ x_2 & y_2 & z_2\end{bmatrix} \begin{bmatrix} a \\ b\\ c\end{bmatrix} = \begin{bmatrix} 0 \\ 0\end{bmatrix}$.  i.e., $[a, b, c]$ is the kernel of the $2\times 3$ matrix, which has rank 2.)
+
+    The restriction of a homogeneous polynomial $f(x, y, z)$ to a line $\ell = \{up + vq\}$ is obtained by substitution $f(up + vq)$.  This is a homogeneous polynomial in $u$, $v$ of degree $ = \deg (f)$.  Over $\mathbb C$, any such polynomial can be factored into linear factors $(up_i + vq_i)$.  These are the points of $\ell$ (not necessarily distinct) that lie on $V(f)$.  Thus, a plane polynomial curve of degree $d$ meets a line in $d$ points, counted with multiplicity.
+
+    Let $f$ be a homogeneous polynomial of degree $d$ in $x_1$, $x_2$, $x_2$, and let $C = V(f)$.  Let $f_i$ denote $\frac{\partial f}{\partial x_i}$ and let $f_{ij} = \frac{\partial^2 f}{\partial x_i\partial x_j}$.  Then the Hessian Matrix is the $3\times 3$ symmetric matrix
+    $$H(f) = \left(\frac{\partial^2 f}{\partial x_i \partial x_j}\right)_{ij}.$$
+
+    \begin{prop*}[Euler's Formula]
+      Let $f$, $d = \deg(f)$, $f_i$ be as above.  Then $\sum_{i=1}^3 f_i x_i = f \deg(f)$.
+    \end{prop*}
+    \begin{proof}
+      Check it for monomials, since it's additive.  (CHECK NOT INCLUDED)
+    \end{proof}
+    This works for polynomials in $n$ variables.
+
+    Now consider the Taylor expansion of the restriction of $f$ to $\ell = \{up + vq\}$. \\
+    Setting $u = 1$ ($v = 0$ is $p$, so looking near the point $p$):
+    $$f(p+ vq) = f(p) + \left(\sum f_i(p)q_i \right) v + \frac12\left(\sum f_{ij} q_i q_j\right) v^2 + \mathcal O(v^3)$$
+    with $q = (q_1, q_2, \ldots)$.
+
+    \begin{prop*}
+      \begin{enumerate}
+        \item If $p$ is a point of $C$, then $f(p) = 0$.
+        \item Suppose $p\in C$, and $f_i(p)$ are not all 0.  Then the equation of the tangent line $T$ to $C$ a t $p$ is $\sum f_i(p)q_i = 0$.
+        \item Let $h$ be the Hessian of $f$ at $p$.  Then $\det h = 0$ iff $p$ is a \emph{flex} point $C$ (i.e., a restriction of $f$ to the tangent line at $p$ has a zero of order $\ge 3$ at $p$
+      \end{enumerate}
+    \end{prop*}
+    \begin{proof}
+      \begin{enumerate}
+        \item By definition.
+        \item Tangent line: if the restriction of $f$ to $T$ has at least a second order 0 (by definition).  So looking at the coefficient of $v$, this is clear.
+        \item Exercise: Check that the restriction of the quadratic term to the tangent line is 0 iff $\det h = 0$.
+      \end{enumerate}
+    \end{proof}
+
+    \begin{defn*}
+      If all the $f_i$ vanish at $p$, then $p$ is called a \emph{singular} point of $C = V(f)$.  Otherwise, say that $C$ is \emph{non-singluar} at $p$.  Say that $C$ is a \emph{non-singular curve} if it has no singular points.
+    \end{defn*}
+
+    \subsubsection{Nonsingular curves}
+      e.g. 1, an irreducible conic is always non-singular
+      \begin{proof}
+        Convert to $x^2 - yz = 0$.  $f_x = 2x$, $f_y = -z$, $f_z = -y$.  Since $(x, y, z)\in \mathbb P^2$, not all these can be zero, so it's nonsinular
+      \end{proof}
+
+      e.g. 2, An irreducible plane cubic can have at most one singular point (exercise)
+
+      e.g. 3, The curve $x^d + y^d + z^d = 0$ is non-singular (smooth) for $d \ge 1$. (Fermat polynomial of degree $d$). \\
+      The partial derivatives are $dx^{d-1}$, $dy^{d-1}$, $dz^{d-1}$, not all zero (in $\mathbb P^2$)
+
+      e.g. 4, The curve $x^3 + y^2 - xyz = 0$ is singular at the point $(0:0:1)$.
+
+      \begin{prop*}
+        For most values of the coefficients of a polynomial of degree $d$, the curve $C = V(f) \subseteq \mathbb P^2$ is smooth.
+      \end{prop*}
+      \begin{proof}
+        See two proofs, each of which depends on some theorem which will be proved later.
+
+        Setup: Order the monomials of degree $d$ in $x$, $y$, $z$ arbitrarily $m_1$, $m_2$, \ldots, $m_N$.  (Note: $N = \binom{d + k - 1}{k - 1}$ for $k$ variables.)
+
+        An arbitrary polynomial of degree $d$ is a linear combination of the monomials $m_\nu$ with some coefficients $z_\nu$.  Think of $z_\nu$ as variables and let
+        $$F = \sum_{\nu = 1}^N z_\nu m_\nu \in\mathbb C[x, y, z, \{z_\nu\}].$$
+        Then $F = 0$ defines a subvariety $\mathcal C$ of the product $\mathbb P^2 \times Z$, where $Z$ is $\mathbb A^N$ with coordinates $z_\nu$.
+
+        \begin{center}\includegraphics[width=0.5\textwidth]{2011-02-09_Diagram_001}\end{center}
+
+        The \emph{fiber} $\mathcal C^0 = \pi^{-1}(z^0)$ of $\mathcal C$ over a point $z^0\in Z$ is the curve whose equation is the polynomial obtained.
+
+        by substituting $z_\nu^0$ for $z_\nu$.  The 3 partial derivatives $F_x$, $F_y$, $F_z$ are polynomials in $x$, $y$, $z$, $\{z_\nu\}$ linear in $z_\nu$ and homogeneous of degree $d - 1$ in $x$, $y$, $z$.  They define some subvariety of $\mathbb P^2\times Z$.  Let $S$ be the variety $\{F_1 = F_2 = F_3 = 0\}$.  Note that $S \subset \mathcal C$ (by Euler).
+
+        The fiber $\mathcal C^0$ over a point $z^0$ of $Z$ is smooth if and only if $\mathcal C^0$ doesn't meet $S$.
+
+        We can construct $\Sigma = \pi(S)$ the image of $S$ via a polynomial $\mathbb P^2 \times Z \to Z$.  Later we'll prove that the image of the projection of any Zariski closed subvariety of $\mathbb P^2 \times Z$ to $Z$ is also Zariski closed.
+
+        So the set $\Sigma$ is closed in the affine space $Z$.  But $\Sigma$ is not all of $Z$ (because the Fermat curve is smooth).  So $\Sigma \subset Z$ is a proper closed subvariety.  So the set of $z^0$ for which $\mathcal C^0$ is smooth is a Zariski open subset of $\mathbb A^N$.
+      \end{proof}
+\end {document}
+
