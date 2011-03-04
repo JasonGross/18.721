@@ -1,3 +1,3 @@
-###!/bin/bash
+#!/bin/bash
 pushd "Notes by Day"
 popd
