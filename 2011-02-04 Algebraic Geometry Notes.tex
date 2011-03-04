@@ -74,10 +74,10 @@
     \verbatim@start
 }{\@esphack\endgroup}
 
-\newwrite\readfile@in
+\newread\readfile@in
 \newcommand{\appfileto}[2]{%
   \expandaftercmds{%
-    \endlinechar\expandafter\m@ne
+    \endlinechar\m@ne
     \immediate\openin\readfile@in #1\relax
     \@appfileto{#2}%
     \immediate\closein\readfile@in

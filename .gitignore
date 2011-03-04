@@ -17,6 +17,7 @@
 *.backup
 *.zip
 *.sec
+*.lzy
 website/*
 website/
 2009
