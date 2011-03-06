@@ -50,7 +50,7 @@
           \end{enumerate}
       \end{enumerate}
     \end{prop*}
-    \begin{proof}
+    \begin{proof} \par\noindent
       \begin{itemize}
         \item[$(1) \implies (2)$] Clear
         \item[$(2) \implies (3)$] Clear
