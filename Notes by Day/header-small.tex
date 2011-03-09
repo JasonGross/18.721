@@ -48,8 +48,6 @@
 \newtheorem*{conjecture*}{Conjecture}
 \newtheorem*{cor*}{Corollary}
 \newtheorem*{prop*}{Proposition}
-\newtheorem*{example*}{Example}
-\newtheorem*{eg*}{Example}
 \newtheorem*{exercise*}{Exercise}
 \newtheorem*{law*}{Law}
 \newtheorem*{claim*}{Claim}
@@ -59,7 +57,12 @@
 \theoremstyle{definition} \newtheorem{defn}{Definition}[section]
 \theoremstyle{definition} \newtheorem*{defn*}{Definition}
 \newtheorem{example}[thm]{Example}
+\newtheorem*{example*}{Example}
 \newtheorem{eg}[thm]{Example}
+\newtheorem*{eg*}{Example}
+
+\newtheorem{fact}{Fact}[section]
+\newtheorem*{fact*}{Fact}
 
 \newcommand{\thmref}[1]{Theorem~\ref{#1}}
 %=============================== End AMSTHM ===============================
@@ -134,7 +137,8 @@
 \DeclareMathOperator{\divergence}{div}
 \DeclareMathOperator{\tr}{tr}
 \DeclareMathOperator{\grad}{grad}
-\DeclareMathOperator{\spec}{spec}
+\DeclareMathOperator{\spec}{Spec}
+\DeclareMathOperator{\pspec}{PSpec}
 \DeclareMathOperator{\rad}{rad}
 \newcommand{\lcmf}[2]{\lcm\left( #1 , #2 \right)}
 

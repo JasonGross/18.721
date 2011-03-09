@@ -1193,4 +1193,165 @@
 \end{notessection}
 
 
+
+
+
+
+
+
+
+
+\begin{notessection}{3}{9}{2011}
+  %\subsection*{Corrections from Last Time}
+  \begin{thm*}
+    Let $A$ be a finite type algebra and a domain, and let $K$ be the field of fractions.  Then the integral closure of $A$ is a finite extension $L / K$, and is a finite $A$-module.
+  \end{thm*}
+  \begin{proof}
+    Had the trace pairing $L \times L \to K$, $x, y \leadsto tr(xy)$.  It's non-degenerate because:
+    
+    $y x \ne 0$, put $y = x^{-1}$
+    
+    $\langle x, y \rangle = t(1) = [L:K]$
+    
+    Reduce to the case of $A$ integrally closed by Noether Normalization.
+    
+    $k[y] \subset A$, $A$ a finite $k[y]$-module
+    
+    $k[y] \subset K \subset L$.
+    
+    Replace $A$ by $k[y]$.
+    
+    $\therefore$, we may assume that $A$ is integrally closed.  Then if $\alpha \in L$ is integral over $A$, $tr(\alpha) \in A$.
+    
+    Therefore, if $B$ is any subring of $L$, and a finite $A$-module, then all elements are integral over $A$.  Therefore, $B\times B \to A$, $x, y \leadsto \langle x, y\rangle = tr(xy)$.
+    
+    \emph{We want to show} that there is a maximal such $B$.  Then $B$ is the integral closure in $L$.
+    
+    Start with one, $B_0$, big enough so that it contains a basis for $L / K$.  (We can do this because for any $\gamma\in L$, $\gamma$ is algebraic in $K$; $\gamma^n - a_1 \gamma^{n-1} + \cdots \pm a_n = 0$ with $a_i\in K$.  Since $K$ is the field of fractions, we can clear denominators, getting $d\gamma^n - a_1' \gamma^{n-1} + \cdots \pm a_n' = 0$, with $d, a_i'\in A$.  Then $d\gamma$ is integral over $A$; multiply everything by $d^{n-1}$.)  Denote the basis by $(v_1, \ldots, v_n)$, $v_i\in B_0$, $n = [L:K]$.
+    
+    Investigate some larger algebra (which is still a finite $A$-module) $B$.  Then $A\subset B_0 \subset B$.
+    \begin{align*}
+      B \times B & \to A \\
+      \beta, v_i & \leadsto b_i \defeq \langle \beta, v_i\rangle\in A \\
+      \intertext{map}
+      \beta & \leadsto (b_1, \ldots, b_n)\in A^n \\
+      B & \stackrel{\Phi}{\to} A^n
+    \end{align*}
+    This is $A$-linear (homomorphism of $A$-modules)
+    
+    $\Phi$ is injective: $\Phi(\beta) = 0$ means $\langle \beta, v_i\rangle = 0$ for all $i$.  Since $\{v_i\}$ is a basis for $L / K$, $\langle \beta, y \rangle = 0$ for all $y \in L$.  Thus, $\beta = 0$.
+    
+    Then we can identify $B$ with $\Phi(B)$ as a submodule of $A^n$.  Since $A$ is noetherian, submodules have the ascending chain condition.
+  \end{proof}
+  
+  (DIGRESSION ABOUT GALOIS GROUPS AND $G$-ORIBTS NOT INCLUDED)
+  
+  Let $A \subset B$ be a domain, $A$ finite-type and integrally closed, and $B$ a finite $A$-module.
+  
+  What about prime ideals in $A$ and $B$?
+  \begin{itemize}
+    \item[] extended ideal of $P\subset A$ is $P^e = PB$ ideal of $B$
+    \item[] contracted ideal of $Q\subset B$ is $Q^c = A \cap Q$ ideal of $A$
+  \end{itemize}
+  
+  \begin{fact*}[General Fact]
+    If $Q$ is a prime ideal of $B$, then $Q^c$ is a prime ideal of $A$.
+    $$
+    \xymatrix{
+      A \ar@{^{(}->}[rr] \ar[dr]_{\text{kernel $Q^c$}} && B \ar[dl]^{\text{kernel $Q$}} \\
+      & B / Q \text{\makebox[0pt][l]{a domain ($Q$ prime)}}
+    }
+    $$
+    The image is a domain, so $Q^c$ is a prime ideal.
+  \end{fact*}
+  
+  Back to the case above,
+  $$
+  \xymatrix @R=0.5em{
+    A \ar@{^{(}->}[r] & B \\
+    P' & Q' & \text{we mean }P' = A \cap Q' \\
+    P & Q & P = A \cap Q,\quad Q'\supset Q
+  }
+  $$
+  
+  \begin{fact}[Lying Over]
+    Given $P$ a prime ideal of $A$, there exists a $A$ prime ideal of $B$, with $A \cap Q = P$.  (The map $\pspec B \to \pspec A$ is injective.)
+  \end{fact}
+  
+  \begin{fact}[Going Up]
+    Given
+    $$
+    \xymatrix @R=0.25em{
+      A \ar@{^{(}->}[r] & B \\
+      P' &  *+[o][F.]{Q'} & \ar[l] \text{exists} \\
+      P & Q
+    }
+    $$
+  \end{fact}
+  
+  \begin{fact}[Going Down]
+    If $A$ is integrally closed, then given
+    $$
+    \xymatrix @R=0.25em{
+      A \ar@{^{(}->}[r] & B \\
+      P' &  Q' \\
+      P & *+[o][F.]{Q} & \ar[l] \text{exists}
+    }
+    $$
+  \end{fact}
+  
+  \begin{lem*}
+    Given 
+    $$
+    \xymatrix @R=0.25em{
+      A \ar@{^{(}->}[r] & B \\
+      P' &  Q' \\
+      P & Q
+    }
+    $$
+    If $P' = P$, then $Q' = Q$.
+  \end{lem*}
+  \begin{proof}
+    \begin{enumerate}[{Case }1:]
+      \item $P = 0$.  We need to show that if $P' = 0$, then $Q' = 0$.  Take $\alpha \in Q' \subset B$.  Then $\alpha$ is integral over $A$ (because it's in $B$?).  We have $\alpha^r - a_1 \alpha^{r-1} + \cdots \pm a_r = 0$.  Since $a_r \in Q'$ and $a_r\in A$, we have $a_r \in P' = \{0\}$.  Thus $a_r = 0$.  If $\alpha \ne 0$, then cancel $\alpha$ from the relation, and repeat until $r = 1$.  Then $\alpha^1 - a_1 = 0$.  Since $a_1 \in A$ and $a_1 \in Q'$, $a_1\in P'$.  Then $a_1 = 0$ and $\alpha = 0$, which is a contradiction.
+      \item (general case).  Go to $\bar A = A / P \subset \bar B = B / Q$.  
+        $$
+        \xymatrix @R=0.25em{
+          \bar A \ar@{^{(}->}[r] & \bar B \\
+          \bar P' &  \bar Q' \\
+          (0) & (0)
+        }
+        $$
+        Then case 1 says that $\bar P' = (0)$ implies that $\bar Q' = (0)$.  Then $\bar P' = (0) \iff P' = P$ and $\bar Q' = (0) \iff Q' = Q$.
+    \end{enumerate}
+  \end{proof}
+  \begin{lem*}
+    If $Q$ is a maximal ideal of $B$, then $Q^c = P$ is maximal in $A$.
+  \end{lem*}
+  \begin{proof}
+    $Q$ is maximal in $B$ if and only if $\bar B = B / Q$ is a field.  Then $A / P = \bar A \subset \bar B$ is a field.  Then $\bar B$ is a finite $\bar A$-module.
+    \begin{lem*}
+      If $A \subset B$ is a field and $B$ is a finite $A$-module, then $A$ is a field.
+    \end{lem*}
+    \begin{proof}
+      Take a non-zero element in $\alpha\in A$ (we want to show that it's invertible).  Then $\alpha$ is invertible in $B$.  Since $B$ is a finite $A$-module, so $u = \alpha^{-1}$ is integral over $A$.  Then $u^r - a_1 u^{r-1} + \cdots \pm a_r = 0$ with $a_i \in A$.  Multiply by $\alpha^{r - 1}$.  Then we get $u - a_1 + a_2 \alpha - \cdots \pm a_r \alpha^r = 0$, with all of these elements of $A$.
+    \end{proof}
+    (To be finished next time?)
+  \end{proof}
+\end{notessection}
+
+
+
+
+
+
+
+
+
+
+\begin{notessection}{3}{11}{2011}
+
+\end{notessection}
+
+
 \end{document}
