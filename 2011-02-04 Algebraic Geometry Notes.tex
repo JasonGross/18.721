@@ -1350,6 +1350,112 @@
 
 
 \begin{notessection}{3}{11}{2011}
+  Finite group action on an integrally closed finite-type domain $B$, $A = B^G$, (has the?) invariants
+  \begin{itemize}
+    \item[] $\max A \leftrightarrow G$-orbit in $\max B$
+    \item[] $A$ is finite type and integrally closed
+    \item[] $B$ is a finite $A$-module
+  \end{itemize}
+  \begin{defn*}
+    $A$ is \emph{normal} if it's integrally closed in the field of fractions of $A$ (i.e., it's own fraction field).
+  \end{defn*}
+  \begin{thm*}
+    Let $G$ be a finite group that acts on an integrally closed finite-type domain $B$, $A = B^G$.  Then
+    \begin{itemize}
+      \item $\pspec A \leftrightarrow (\pspec B) / G$
+      \item This preserves inclusions.  More formally, If $P\leftrightarrow \text{orbit }\{Q_j\}$ and $P' \leftrightarrow \text{orbit }\{Q'_i\}$, then $P \subset P'$ if and only if $\forall j \exists i$ such that $Q_j \subset Q'_i$. \par\noindent
+      We have $Q \leadsto A \cap Q$, $\spec B \to \spec A$
+    \end{itemize}
+  \end{thm*}
+  \begin{lem*}
+    Let $Q_1, \ldots, Q_m$; $Q_1', \ldots, Q_n'$ be prime ideals of $B$.  Suppose $Q_j \not\subset \text{any }Q_i'$, $j = 1, \ldots, m$, $i = 1, \ldots, n$.  Then there exists $\alpha \in B$, $\alpha \in Q_1, \ldots, Q_m$, $\alpha \notin Q_1', \ldots, Q_n'$.
+  \end{lem*}
+  \begin{proof}
+    Plan: Solve for a single $Q_j$.  Find $\alpha_j\in Q_j$, $\notin Q_1', \ldots, Q_n'$.  Then the product $(\alpha_1 \cdots \alpha_m$) works; $\alpha_1 \cdots \alpha_m \in Q_i' \implies $ some $\alpha_j \in Q_i'$.  This would be a contradiction.
+    
+    Take $Q_1 = Q$, $Q_1', \ldots, Q_n'$, $\alpha \in Q$, $\notin Q_i'$.
+    
+    %Hypothesis: $Q \not\subset Q_i'$; Conclusion: $Q \not\subset \bigcap Q_i'$.
+    
+    $\alpha = \beta_i\in Q$, $\notin Q_i'$, $i = 1,\ldots$. $\beta_1 \cdots \beta_n\in Q$.
+    \ldots (Proof not included)
+  \end{proof}
+  \begin{proof} (of theorem) \par\noindent
+    In $C$:
+    $$
+    \xymatrix @R=1em{
+      B \ar[r]^\sigma & B \\
+      A \ar@{^{(}->}[u] \ar[r]^{\text{id}} &  A
+    }
+    $$
+    
+    Since $Q$ is a prime ideal of $B$ and $P = A \cap Q$, we have that $\sigma Q$ is a prime ideal of $B$ and $P = A\cap \sigma Q$.  Then an orbit of $Q$ corresponds to one point in $\pspec A$.  By the lying over theorem, $\spec B \to \spec A$ is surjective.  Therefore $(\spec B) / G \to \spec A$ is also surjective.
+    
+    \emph{Injective}:   $\{Q_1, \ldots, Q_m\}$, $\{Q_1', \ldots, Q_n'\}$ distinct orbits.  $A \cap Q_j = P$, $A \cap Q_i' = P'$, show $P \ne P'$.
+    \begin{claim*}
+      We can't have $Q_i \subset Q_j'$ for some $i$, $j$ and also $Q_k' \subset Q_\ell$ for some $k$, $\ell$.
+    \end{claim*}
+    \begin{proof}
+      We can renumber, $i = j = 1$.  $Q_k' \subset Q_\ell \implies \sigma Q_k' \subset \sigma Q_\ell$.  We may then assume that $\ell = 1$; since $\sigma$ runs through the whole orbit, we can choose an appropriate $\sigma$.
+      
+      Then $Q_1 \subset Q_1'$, $Q_k' \subset Q_1$.  Then $Q_k' \subset Q_1 \subset Q_1'$.  Then $Q_k' \subset Q_1'$.  Thus $k = 1$, because $Q_k' = \sigma Q_1'$ for some $\sigma$ (and permutations can't take sets to proper subsets of themselves).  Then $Q_1' \subset Q_1 \subset Q_1'$, so $Q_1 = Q_1'$.  This is a contradiction, since orbits are disjoint.  Thus, we may suppose that $Q_j \not\subset Q_i'$ for any $i$, $j$.
+    \end{proof}
+    There exists an $\alpha \in Q_1 \cap \cdots \cap Q_m$, $\notin Q_i'$.  Take $\gamma = \prod_\sigma \sigma \alpha $, $\gamma\in Q_j$, $\notin Q_i'$, and $\gamma \in A$.  Thus, $\gamma \in P$, $\notin P'$, so $P \ne P'$.
+    
+    The proof of the second point is skipped  (See notes that Prof. Artin posted).
+  \end{proof}
+  
+  Let $B$ be a finite $A$-module for a normal $A$.  
+    $$
+    \xymatrix @R=1em{
+      A \ar@{^{(}->}[r] & B \\
+      P' \ar@{^{(}->}[u] &  Q' \ar@{^{(}->}[u] \\
+      P \ar@{^{(}->}[u] & Q \ar@{^{(}->}[u]
+    }
+    $$
+  $P' = A \cap Q'$, $P = A \cap Q$
+  
+  \begin{thm*}[Going Up]
+    In the diagram above, given $P$, $P'$, $Q$, there exists a $Q'$.
+  \end{thm*}
+  
+  \begin{thm*}[Going Down]
+    In the diagram above, given $P$, $P'$, $Q'$, there exists a $Q$.
+  \end{thm*}
+  \begin{proof}
+    Let $K$ be the fraction field of $A$ and $L$ be the fraction field of $B$.
+    \begin{enumerate}[{Case }1:]
+      \item $L / K$ is Galois, has Galois group $G$(?).  $B$ is normal. \par\noindent
+        $\sigma$ acts on $B$: The elements of $B$ are integral of $A$.  If $\beta$ is integral, so is $\sigma \beta$.  Then, since $B$ is normal, $B$ is the integral closure of $A$ in $L$.  Thus, $\sigma \beta \in B$.
+        
+        $A = B^G$. (We know that $B$ is a finite $B^G$-module.):  $A \subset B^G$ and $A$ is normal.  Since $B$ is integral over $A$, $B^G$ is integral over $A$, so $A = B^G$.
+        
+        Then the theorem follows from the previous theorem.
+      \item (general case): $L / G$ not Galois, and/or $B$ not normal:  Put $L \subset F$ a Galois extension of $K$ with Galois group $G$.  Let $C$ be the integral closure of $A$ in $F$.  This is a finite $A$-module.  Then $G$ operates on $C$.  Then $A = C^G$ (by the same reasoning as in case 1).
+      
+      $$
+      \xymatrix @R=0.25em{
+        A \ar@{^{(}->}[r] & B \ar@{^{(}->}[r] & C \\
+        P'  &  Q' & R'\\
+        P  &  & R
+      }
+      $$
+      
+      By lying over, there exists a prime ideal $R'$, $B \cap R' = Q'$.  Case 1 says that there exists an $R$.  Then $A \cap R = P$.  Put $Q = B \cap R$.
+    \end{enumerate}
+  \end{proof}
+\end{notessection}
+
+
+
+
+
+
+
+
+
+
+\begin{notessection}{3}{14}{2011}
 
 \end{notessection}
 

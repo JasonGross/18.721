@@ -18,6 +18,7 @@
 *.zip
 *.sec
 *.lzy
+compile-all.bat
 website/*
 website/
 2009
