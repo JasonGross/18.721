@@ -174,6 +174,7 @@
 }
 \newwrite\notes@section@write
 \edef\notes@filenametemp{\jobname.sec}
+\AtEndDocument{\immediate\write18{rm "\notes@filenametemp"}}
 \newenvironment{notessection}[3]{%
   \addtocounter{notes-file-number}{1}%
   \edef\notes@filenamepart{\classnumber\space Lecture Notes \twodigit{\value{notes-file-number}} - #3-\twodigit{#1}-\twodigit{#2}}%
@@ -1457,7 +1458,7 @@
 
 \begin{notessection}{3}{14}{2011}
   \begin{defn*}
-    The \emph{Knull dimension} of a ring $A$ is the length of the longest chain of prime ideals $P_0 < P_1 < \cdots < P_d$.
+    The \emph{Krull dimension} of a ring $A$ is the length of the longest chain of prime ideals $P_0 < P_1 < \cdots < P_d$.
   \end{defn*}
   In a dimension zero ring, every prime ideal is maximal and also minimal.  Therefore, there are a finite number of prime/minimal ideals.
   
@@ -1473,7 +1474,7 @@
     
     ($P /  x\in P \longleftrightarrow \text{prime ideals }\bar B\text{ of }\bar A = A / (x)$.
     
-    Therefore, the Knull dimension of $\bar A$ is the Knull dimension of $A$, - 1.)
+    Therefore, the Krull dimension of $\bar A$ is the Krull dimension of $A$, - 1.)
   \end{thm*}
   \subsection*{Discrete valuations}
     Generalize order of vanishing of $f(x)$ at $x = a$.  For $f(x_1, \ldots, x_n)$, talking about order of vanishing at $(a_1, \ldots, a_n)$ doesn't make much sense.  But we can define the order of vanishing along a subvariety of codimension 1.
@@ -1545,6 +1546,123 @@
 
 
 \begin{notessection}{3}{16}{2011}
+
+\end{notessection}
+
+
+
+
+
+
+
+
+
+
+\begin{notessection}{3}{18}{2011}
+  $GK$-dimension $A$ (finite-type algebra, domain) \\
+  Choose $V$ a one-dimensional subspace which
+  \begin{itemize}
+    \item generates $A$
+    \item contains 1 (that is, $1\in V$)
+  \end{itemize}
+  $V^n$ is the span of products of length $n$ of elements of $V$. \\
+  $V \subset V^2 \subset \cdots$ \\
+  $\bigcup V^n = A$ \\
+  The generating function $g$ is $g(n) = \dim V^n$ \\
+  $GK$-$\dim V = d$ means that $g(n) \le c n^d$ and $\not\le c n^{d-\epsilon}$
+  
+  \begin{lem*} \\
+    \begin{itemize}
+      \item This is independent of the choice of $V$.
+      \item $\gk(k[x_1, \ldots, x_n]) = d$ (?)
+    \end{itemize}
+  \end{lem*}
+  Take $V = $ polynomials of degree $\le 1$.  Then $\dim V^n = \binom{n+d}{d}$.
+  
+  Trivial fact: If $\bar A = A / I$ then $\gk(\bar A) \le \gk(A)$.
+  \begin{lem*}
+    Suppose $A \subset B$, $B$ a finite $A$-module.  Then $\gk(B) = \gk(A)$.
+  \end{lem*}
+  \begin{proof}
+    Choose a finite dimensional subspace $U$ of $B$ that generates $B$ as an $A$-module.  Then $U^2 \subset B = AU$.  Now choose a (one-dimensional) generating space $V$ for $A$ large enough so that $U^2 \subset VU$.  Take $W = V + U$ to generate $B$ as an algebra.  Then we have
+    $$W^n = V^n + V^{n-1} U + V^{n-2}U^2 + \cdots + U^n.$$
+    Since $V^{n-2}U^2 \subset V^{n-1}U$, by induction, $U^n \subset V^{n-1}U$.  Then $W^n \subset V^n + V^{n-1}U$.  Since $W = V + U$, we also have that $V^n \subset W^n$.
+    
+    Let $h(n) = \dim W^n$.  Then
+    $$g(n) \le h(n) \le g(n) + rg(n-1) \le (r+1)g(n)$$
+    with $r = \dim U$.
+  \end{proof}
+  
+  Let $K$ be the fraction field of $A$.
+  Define $\trdeg A = \trdeg K / \mathbb C$.\footnote{$\trdeg$ is the transcendence degree.}
+  
+  \begin{cor*}
+    $\gk(A) = \trdeg K / \mathbb C$.  
+  \end{cor*}
+  \begin{proof}
+    Noether Normalization says that $A$ is a finite module over $k[x_1, \ldots, x_k]$, $k[x] \subset A$.  Then $k = \trdeg K / \mathbb C$.
+  \end{proof}
+  Corollaries:
+  \begin{itemize}
+    \item $\gk(A) \in \mathbb N$
+    \item $s \ne 0, s\in A \implies \gk(A_s) = \gk(A)$ (same field of fractions, therefore same degree)
+  \end{itemize}
+  
+  
+  Let $A$ be a finite type domain, $P$ a prime ideal of codimension 1 ($(0) < P$ and no primes in between).
+  
+  \begin{prop*}
+    $\gk(A / P) = \gk(A) - 1$ or $\trdeg A / P = \trdeg A - 1$
+  \end{prop*}
+  \begin{proof}
+    Replace $A$ by its normalization $A'$, a finite $A$-module.
+    
+    
+    $$
+    \xymatrix @R=0.25em{
+      A \ar@{^{(}->}[r] & B \\
+      P  &  Q\quad\text{also codim 1 ($P = A \cap Q$)}\\
+      (0)  & (0)
+    }
+    $$
+    $$\trdeg A = \trdeg B$$
+    $B / Q$ is a finite $A / P$-module, $\trdeg B / Q = \trdeg A / P$.
+    
+    Assume $A$ is normal.  Then the local ring $A_P$ is a DVR (discrete valuation ring).  The maximal ideal $P_P = tA_P$ for some $t\in A_P$.  It's a principal ideal.  $t$ is a fraction $s^{-1}a$, $s\notin P$.
+    
+    Localize: Replace $A$ by $A_s$, $P$ by $P_s$.  (It still has codimension 1 because the prime ideals in the localized ring are subsets of the original prime ideals.(?))  Now $t \in A$, but it might not generate $P$.  Say $P = (u_1, \ldots, u_r)$.  In the local ring, $t\mid u_i$.  Then, we can get a common denominator, so $u_i = t(s_1^{-1}b_i)$, $b_i \in A$, $s\notin P$.  Now replace $A$ by $A_{s_1}$.  Now $t$ generates $P$.
+    
+    We've reduced to the case that $P = tA$ ($A$ normal).  Extend $t$ to a transcendence basis\footnote{\emph{Transcendence basis}: Maximally algebraically independent set in the fraction field.} for the fraction field of $A$, $(t, x_1, \ldots,x_k)$, $x_i \in A$.
+    
+    Now $k[t, x_1, \ldots, x_k] \subset A$ and the elements of $A$ are algebraic over $k[t, x]$.  Look at $k[x_1, \ldots, x_k] \to \bar A = A / P = A / tA$.  What's the kernel?  $f(x) \leadsto 0$ means that $f(x) = t\alpha$, $\alpha \in A$.
+    
+    \ldots We seem to not have a proof.  (To be posted online.  We'll assume the proposition is true.)
+  \end{proof}
+  
+  \begin{thm*}
+    $\gk(A) = \trdeg A = \text{Krull}\,\dim A$.
+    More precisely, every maximal chin of prime ideals $(0) < P_1 < P_2 < \cdots < P_d$ has length $d = \gk(A) = \trdeg A$.
+  \end{thm*}
+  \begin{proof}
+    We have already done $\gk(A) = \trdeg A$.
+    
+    We induct on $d$.  We prove the statement: If a maximal chain has length $d$, then $d = \gk(A)$.  Look at $\bar A = A / P_1$.  A maximal chain in $\bar A$ is $(0) = \bar P_1 < \bar P_2 < \cdots < \bar P_d$ (by the correspondence theorem) has length $d - 1$.  Then the Krull dimension of $\bar A$ is $\gk(A) = d - 1$.  Therefore, $\gk(A) = d$.
+    
+    (Where is Krull's Theorem?!)
+  \end{proof}
+  \relax
+\end{notessection}
+
+
+
+
+
+
+
+
+
+
+\begin{notessection}{3}{28}{2011}
 
 \end{notessection}
 
