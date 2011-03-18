@@ -33,7 +33,7 @@
 \begin {document}
 \setcounter {section}{16}\section {Monday, March 14, 2011}
   \begin{defn*}
-    The \emph{Knull dimension} of a ring $A$ is the length of the longest chain of prime ideals $P_0 < P_1 < \cdots < P_d$.
+    The \emph{Krull dimension} of a ring $A$ is the length of the longest chain of prime ideals $P_0 < P_1 < \cdots < P_d$.
   \end{defn*}
   In a dimension zero ring, every prime ideal is maximal and also minimal.  Therefore, there are a finite number of prime/minimal ideals.
 
@@ -49,7 +49,7 @@
 
     ($P /  x\in P \longleftrightarrow \text{prime ideals }\bar B\text{ of }\bar A = A / (x)$.
 
-    Therefore, the Knull dimension of $\bar A$ is the Knull dimension of $A$, - 1.)
+    Therefore, the Krull dimension of $\bar A$ is the Krull dimension of $A$, - 1.)
   \end{thm*}
   \subsection*{Discrete valuations}
     Generalize order of vanishing of $f(x)$ at $x = a$.  For $f(x_1, \ldots, x_n)$, talking about order of vanishing at $(a_1, \ldots, a_n)$ doesn't make much sense.  But we can define the order of vanishing along a subvariety of codimension 1.
