@@ -1650,7 +1650,6 @@
     
     (Where is Krull's Theorem?!)
   \end{proof}
-  .
 \end{notessection}
 
 
@@ -1664,6 +1663,106 @@
 
 \begin{notessection}{3}{28}{2011}
 
+\end{notessection}
+
+
+
+
+
+
+
+
+
+
+\begin{notessection}{3}{30}{2011}
+
+\end{notessection}
+
+
+
+
+
+
+
+
+
+
+\begin{notessection}{4}{1}{2011}
+  A (Zariski) closed set in $\mathbb P^n$ (projective variety) is the set of zeros of some homogeneous polynomial.
+  
+  \emph{Segre} embedding $\mathbb P^m \times \mathbb P^n \to \mathbb P^N$, $(x_i),(y_j)\leadsto (u_{ij})$, $u_{ij} = x_iy_j$, $N = (m+1)(n+1) - 1$.  The defining equations are $u_{ij}u_{kl} = u_{il}i_{kj}$.  This mapping is bijective.
+  
+  If $X\subset \mathbb P^N$ is a closed set, then the Zariski topology on $X$ is the induced topology: a closed subset $C$ of $X$ is a subset that is closed in $\mathbb P$ or $C = Y \cap X$ with $Y$ closed in $\mathbb P$.
+  
+  So we can get the Zariski topology on $\mathbb P^m \times \mathbb P^n$ ($=X$).  What are the closed subsets?  If $C$ is closed in $\mathbb P^m\times \mathbb P^n$, then it is the intersection of the set of zeros of some homogeneous polynomials $f(u)$ with $\mathbb P^m \times P^n$.  We may replace $f(u)$ with $f(x_iy_j)$ homogeneous in $x$ and in $y$, with the same degree.
+  
+  \begin{prop*}
+    Closed subsets of $\mathbb P^m \times \mathbb P^n$ are zeros of some polynomials $f(x, y)$ homogeneous in $x$ and homogeneous in $y$, not necessarily of the same degree.
+  \end{prop*}
+  \begin{proof}
+    Say $C$ is the set of zeros of $f(x, y)$ homogeneous of degree $r$ in $x$ and homogeneous of degree $s$ in $y$.  Say $r\le s$.  Look at the zeros of $x_i^{s-r}f(x, y)$ (homogeneous of degree $s$ in $x$), $i = 0, 1, \ldots, m$.
+  \end{proof}
+  
+  \begin{cor*}
+    \begin{align*}
+      \mathbb P^n & \stackrel{\Delta}{\to} \mathbb P^n \times \mathbb P^n \\
+      (x) & \leadsto (x), (x)
+    \end{align*}
+    The diagonal is a closed subset.
+  \end{cor*}
+  \begin{proof}
+    Label the coordinates $(x_i), (x_i')\in \mathbb P^n \times P^n$.  We want $x_i = x_i'$.  The (homogeneous polynomial) equation that defines this is $x_i x_j' - x_j x_i'$, so this is a closed set.
+  \end{proof}
+  
+  What is the product topology on $\mathbb P^n \times \mathbb P^n$?  The closed subsets are given by the basis $(C \times \mathbb P) \cap (\mathbb P\times C')$.  This is bad, because we don't get curves.
+  
+  \begin{defn*}
+    A space $X$ is \emph{Hausdorff} if, for any $p$, $q$ distinct points, there exist disjoint open subsets $U$, $V$ with $p\in U$ and $q\in V$.
+  \end{defn*}
+  
+  \begin{prop*}
+    A space $X$ is Hausdorff if and only if the diagonal is closed in $X \times X$ in the product topology.
+  \end{prop*}
+  \begin{proof}
+    Exercise
+  \end{proof}
+  
+  \begin{thm*}[Hrushovski-Zilber Theorem]
+    A ``\emph{Zariski topology}'' is a set $X$ and, for all products $X\times X \times \cdots \times X$, a collection of ``closed'' subsets of $X$, satisfying the following axioms:
+    \begin{itemize}
+      \item Compatible with projection and inclusions of $X\times X\times \cdots \times p \times \cdots \times X$.
+      \item Noetherian (descending chain condition)
+      \item dimension 1
+    \end{itemize}
+    
+    Then there exists an algebraically closed field $K$ and an algebraic curve $X$ over $K$ in the Zariski topology.\footnote{See \url{http://en.wikipedia.org/wiki/Zariski\_geometry}.  Wikipedia references the paper ``Hrushovski, Ehud; Zilber, Boris (1996). ``Zariski Geometries''. \emph{Journal of the American Mathematical Society} 9 (01): 1–56. doi:10.1090/S0894-0347-96-00180-4.'' (\url{http://www.ams.org/jams/1996-9-01/S0894-0347-96-00180-4/S0894-0347-96-00180-4.pdf})  This is a theorem of model theory, which Wikipedia defines as ``the study of (classes of) mathematical structures such as groups, fields, graphs or even models of set theory using tools from mathematical logic.''} 
+  \end{thm*}
+  
+  \emph{Projection}: $\mathbb P^n \stackrel{\pi}{\to} \mathbb P^{n-1}$, $(x_0, \ldots, x_n)\leadsto (x_0, \ldots, x_{n-1})$.  This is undefined at the ``center of the projection,'' $(0, 0, 0, \ldots, 0, 1) = p$.  
+  \begin{center}\includegraphics[width=0.5\textwidth]{2011-04-01_Diagram_001}\end{center}
+  In $\mathbb P^n \times P^{n-1}$ let $\Gamma$ be the graph.  $\bar \Gamma$ is the Zariski closure of $\Gamma$.  Label the points $(x_i), (y_i) \in \mathbb P^n \times \mathbb P^{n-1}$.  $\Gamma$: $x_i = y_i$ for $i = 0, \ldots, n-1$.  The equations $x_i y_j - x_j y_i$ for $i, j = 0, \ldots, n-1$ define a Zariski closed set of $\bar \Gamma$.  Look where $x_0 \ne 0$: Take $x_0 = 1$.  Then $y_j = x_j y_0$.  We can't have $y_0 = 0$: Take $y_0 = 1$.  Then $y_j = x_j$, $j = 0, \ldots, n-1$, $x_n$ arbitrary.  Only the center $p = (0, 0, \ldots, 0, 1)$ escapes.  In this case, all the equations are trivial.  So no conditions on $(y)$.  The result is 
+  $$\bar \Gamma = \mathset[(x, \pi(x))]{x\ne p} \cup \mathset[(p, y)]{y\text{ arbitrary}}.$$
+  
+  \emph{Grassmannians}: $G(r, n)$ is the $r$-dimensional subspace of $\mathbb C^n$.  For example, $\mathbb P^n = G(1, n+1)$.  Look at $G(2, 4) = 2$-dimensional subspaces of $\mathbb C^4$ or lines in $\mathbb P^3$.
+  
+  $V$ a vector space of dimension 4, basis $(v_1, v_2, v_3, v_4)$.  There is an exterior algebra $\bigwedge V$.  The rule is $vw = -wv$.  (Or $v\wedge w = -w\wedge v$.)  Then $vv = 0$.
+  
+  \noindent $\bigwedge^2 V$ has a basis $v_iv_j$ for $i = j$ dimension $\binom42 = 6$\\
+  \noindent $\bigwedge^3 V$ has a basis $v_iv_jv_k$ for $i < j < k$ dimension 4 \\
+  \noindent $\bigwedge^4 V$ has a basis $v_1v_2v_3v_4$  dimension 1 \\
+  \noindent $\bigwedge^k V = 0$ for $k > 4$
+  
+  \begin{prop*} The following are equivalent:
+    \begin{itemize}
+      \item There is a subspace $W\subset V$ of dimension 2
+      \item Vectors $w$ in $\bigwedge^2 V$, non-zero, and decomposable into $w = uv$, $u, v\in V$.
+      \item $w$ in $\bigwedge^2 V$, $ww = 0$ $\big/ (\text{scalar})$
+      \item Let $w = \sum\limits_{i<j} a_{ij}v_iv_j \longleftrightarrow (a_{ij})$ in $\mathbb P^5$.  Then $a_{12}a_{34} - a_{13}a_{24} + a_{14}a_{23} = 0$.
+    \end{itemize}
+  \end{prop*}
+  \begin{proof}
+    Partial sketch of one of the implications: $w = \sum a_{ij} u_i v_j$, $ww = \sum\limits_{i<j,k<l} a_{ij}a_{kl}v_iv_jv_kv_l$.  Plug in all the possible values.
+  \end{proof}
 \end{notessection}
 
 
