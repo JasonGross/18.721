@@ -31,7 +31,7 @@
 \newcommand{\flag}[2][]{#2\footnote{#1}}
 
 \begin {document}
-\setcounter {section}{21}\section {Friday, April 1, 2011}
+\setcounter {section}{20}\section {Friday, April 1, 2011}
   A (Zariski) closed set in $\mathbb P^n$ (projective variety) is the set of zeros of some homogeneous polynomial.
 
   \emph{Segre} embedding $\mathbb P^m \times \mathbb P^n \to \mathbb P^N$, $(x_i),(y_j)\leadsto (u_{ij})$, $u_{ij} = x_iy_j$, $N = (m+1)(n+1) - 1$.  The defining equations are $u_{ij}u_{kl} = u_{il}i_{kj}$.  This mapping is bijective.
