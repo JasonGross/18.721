@@ -1,0 +1,110 @@
+\documentclass [letterpaper,11pt,twoside]{article}
+\input {header-small}
+\usepackage[margin=1in]{geometry}
+
+\usepackage{cancel}
+% email to abhinav@math.mit.edu
+\def\d{\, {\rm d}}
+
+%\usepackage{pgf,tikz}
+%\usetikzlibrary{arrows}
+\usepackage{wasysym}
+\usepackage{pdfcomment}
+
+\usepackage{datetime}
+\usepackage{verbatim}
+\usepackage[all]{xy}
+\def\classnumber{18.721}
+\def\classname{Algebraic Geometry}
+\edef\cheadcontent{\classnumber\space Notes}
+
+\pagestyle{fancy}
+\headheight 13.7pt
+\fancyhead{}
+\fancyhead{Jason Gross}%\today}
+\fancyfoot{}
+\lhead{Jason Gross}
+\rhead{\TeX ed on \today}
+\chead{\cheadcontent}
+\cfoot{\thepage\space of \pageref{LastPage}}
+
+\newcommand{\flag}[2][]{#2\footnote{#1}}
+
+\begin {document}
+\setcounter {section}{21}\section {Monday, April 4, 2011}
+  \subsection*{Review}
+    $G(2, 4) = \text{planes in }V^4\text{, lines in }\mathbb P^3$
+
+    $V$ has basis $u_1, u_2, u_3, u_4$
+
+    $\bigwedge^2 V$ has basis $u_1u_2, \ldots, u_3u_4$ ($u_i u_j$ for $i < j$), dimension 6
+
+    $W$ a 2-dimensional subspace of $V$ with basis $(u, v)$, then $w = uv \in \bigwedge^2 V$ determines $W$, and conversely $W$ determines $uv$.  $(u', v') = (u, v)P \implies u'v' = uv\det P$.
+
+    \begin{prop*}
+      2-dimensional subspaces of $V$ correspond to decomposable non-zero elements $w = uv$ of $\bigwedge^2 V$ modulo scalars.
+
+      $w\in \bigwedge^2 V$ is decomposable $\iff$ $ww = 0$ $\iff$ $w = \sum\limits_{i<j} a_{ij}u_i u_j$ and $a_{12}a_{34} - a_{13}a_{24} + a_{14}a_{23} = 0$.
+
+      The grassmanian $G(2, 4)$ is the locus of $a_{12}a_{34} - a_{13}a_{24} + a_{14}a_{23} = 0$ in $\mathbb P_{(a_{ij})}^5$ (dimension $=$ 4).
+    \end{prop*}
+
+  We can show directly that $\dim G(2,4) = 4$.  $W$ is a subspace of dimension 2 with basis $(u, v)$.  ($u = \sum a_i u_i$, $v = \sum b_i u_i$)
+  $$\begin{pmatrix} a_1 & a_2 & a_3 & a_4 \\ b_1 & b_2 & b_3 & b_4 \end{pmatrix} \stackrel{\text{choose a basis}}{\to}
+    \begin{pmatrix} 1 & 0 & * & * \\ 0 & 1 & * & * \end{pmatrix}$$
+
+
+  Ask for the locus of pairs $(p, \ell)$ with $p \in \mathbb P^3$ a point and $\ell$ a line in $\mathbb P^3$.  Let $\Gamma = \text{locus}\mathset[(p, \ell)]{p\in \ell}$.  We can embed this in $\mathbb P^3 \times \mathbb G$ where $\mathbb G = G(2, 4)$.
+  $$\Gamma \subset \mathbb P^3 \times G \subset \mathbb P^3 \times \mathbb P^5 \stackrel{\text{Segre}}{\to} \mathbb P^{23}$$
+  We can show that $\Gamma$ is a closed set in $\mathbb P^3 \times \mathbb G \subset \mathbb P^3 \times \mathbb P^5$ (with coordinates $(x)\times (a_{ij})$): Find defining homogeneous equations.
+  We need $f(x, a)$ homogeneous in $x_i$ and in $a_{ij}$.  If $\ell$ is the line through $(u, v)$ (basis for $W\longleftrightarrow \ell$), $(x)\in \ell$ means $x = su + tv$ for some $s$, $t$.  This is the case if and only if $x$, $u$, $v$ dependent, which is true if and only if $xuv = 0$ in $\bigwedge^3 V$.
+  %$uv = w \longleftrightarrow \text{point }(a_{ij})$
+  $$uv = \sum\limits_{i<j} a_{ij} u_i u_j \longleftrightarrow (a_{ij}) \in \mathbb P^5$$
+  Then $(x) = \sum x_i u_i$ and so $xuv = \sum x_i a_{ijk} u_i u_j u_k$.  Expand this and plug in the relation $a_{12}a_{34} - a_{13}a_{24} + a_{14}a_{23} = 0$.
+
+  \subsection*{Surfaces of degree \texorpdfstring{$d$}{d} in \texorpdfstring{$\mathbb P^3$}{ℙ³}}
+    Given as $f = 0$, $f$ homogeneous of degree $d$ in $(x_1, x_2, x_3, x_4)$.  The number of monomials of degree $d$ is $\binom{d+3}{d}$.
+    $$\left\{\text{surfaces of degree }d\right\} \longleftrightarrow \mathbb S \defeq \text{points in }\mathbb P^N$$
+    with $N = \binom{d + 3}{d} - 1$.
+
+    We ask in $\mathbb G \times \mathbb S$ for $\Theta \defeq \mathset[(\ell, S)]{\ell \subset S}$.
+
+    The following isn't quite right.  (Something is wrong with the degree of $f$?)
+
+    We can show that $\Theta$ is closed in $\mathbb G \times \mathbb S$.  What are its defining equations?  Say $\ell$ is a line through $u, v$, and say that $S$ is the surface given by $f = 0$.  Then $\ell \subset S \iff f(su + tv) = 0$ for all $s$, $t$.  Expand $f(su+tv)$:
+    $$f(su + tv) = s^d f_0(u) + s^{d-1} t f_1(u, v) + \cdots + s t^{d-1} f_{d-1}(u, v) + t^d f_d(v)$$
+    Then $f(su+tv) = 0$ for all $s$, $t$ $\iff$ $f_i(u, v) = 0$ for all $i$.
+
+    \begin{digression}
+      \begin{example*}
+        $$f = x_i x_j x_k$$
+        $f(su + tv) = s^3 u_i u_j u_k + s^2 t(u_i u_j v_k + u_i v_j u_k + v_i u_j u_k) + st^2(u_i v_j v_k + v_i u_j v_k + v_i v_j u_k) + t^3 (v_i v_j v_k)$
+      \end{example*}
+    \end{digression}
+
+    \begin{lem*}
+      $f_i$ depends only on $f$, not on $u$ and $v$.
+
+      That is, if we change basis to $(u', v') = (u, v)P$, the $f_i$ don't change.
+    \end{lem*}
+    \emph{Check}: We check this for $P$ elementary; say $u = u' + \varepsilon v'$, $v = v'$.  Then $f(su + tv) = f(su' + s\varepsilon v' + tv') = f(su' + (s\varepsilon + t)v')$.  We can say $t' = s\varepsilon + t$.  Then the expansion doesn't change, except for the transformation of $t \mapsto t'$ (which doesn't change the $f_i$).
+
+    The above isn't quite right.  (Something is wrong with the degree of $f$?)
+
+    What's the dimension of $\Theta$?
+
+    \emph{Plan}: We can carry any line in $\mathbb P^3$ to any other line by a change of coordinates.
+
+    Take a particular line $\ell_0$.  Suppose we determine $\dim\mathset[S]{\ell_0\subset S} = r$.  Then $\dim\Theta = \dim \mathbb G + r = r + 4$.
+
+    Suppose we take $\ell_0$ to be the line $\{(x_1, x_2, 0, 0)\}$.  Is $f(x_1, x_2, 0, 0)$ identically zero?  When we substitute in, we get a homogeneous polynomial of degree $d$ in $x_1$, $x_2$:
+    $$f(x_1, x_2, 0, 0) = \alpha_0 x_1^d + \alpha_1 x_1^{d-1}x_2 + \cdots + \alpha_d x_2^d$$
+    The $d + 1$ coefficients of $f$ must then be zero, so $\dim\mathset[S]{\ell_0 \subset S} = \dim \mathbb S - (d+1)$.  So $r = \binom{d+3}{d} - 1 - (d+1)$.  Then $\dim\Theta = \binom{d+3}{d} - d + 2$.
+
+    For $d = 1$, $\dim\Theta = 5$.  $\dim \mathbb S = 3$.  We expect the set of lines in a given $S$ to have dimension 2, so this is correct.
+
+    For $d = 2$, $\dim\Theta = 10$.  $\dim \mathbb S = 9$ (10 coefficients, but it's projective space).  We expect a particular $S$ to have a 1-dimensional family of lines.
+
+    For $d = 3$, $\dim\Theta = 19$.  We expect a finite number of liens in a cubic.  The number of lines contained in a generic cubic surface is 27.
+\end {document}
+
