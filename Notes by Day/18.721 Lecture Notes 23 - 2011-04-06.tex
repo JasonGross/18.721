@@ -32,6 +32,145 @@
 
 \begin {document}
 \setcounter {section}{22}\section {Wednesday, April 6, 2011}
+  \subsection*{Double Planes}
+    Affine case: $A = \mathbb C[x, y]$, $\spec A = \mathbb A^2 = X$
 
+    $f(x, y) \in A$, square-free (no square factors, non-constant).  Let $B = A[w] / (w^2 = f)$, $Y = \spec B$.
+
+    $B$ is a domain, free $A$-module with basis $(1, w)$.
+
+    Automorphism $\sigma : B \to B$, $w \mapsto -w$.  $A = B^{\langle \sigma \rangle}$
+
+    \begin{lem*}
+      $B$ is normal.
+    \end{lem*}
+    \begin{proof}
+      Let $\beta = a + b w$ in $\fract(B)$.  It is interal over $A$, and not in
+      $A$ ($b \ne 0$), irreducible polynomial has coefficients in $A$.  $t^2 - (\beta + \beta') t + \beta \beta'$, $\beta' = \sigma \beta$.  Then $\beta + \beta' = 2a \in A$, $\beta\beta' = a^2 - b^2 f$ with $b^2 f \in A$.  Since $f$ is square-free, $b\in A$, and so $\beta \in B$.
+    \end{proof}
+
+    General theory says $\pspec B / \langle \sigma \rangle = \pspec A$.
+
+    Prime ideals of $A$: $(0)$; $(g)$ prime ideal, $g$ irreducible; $\mathfrak M_p$ maximal $\leftrightarrow$ $p\in X$.
+
+    What prime ideals of $B$ lie over $P$?
+    \begin{itemize}
+      \item[] $(0)$ lies over $(0)$.
+      \item[] Maximal ideals of $B$ $\longleftrightarrow$ points of $Y = \spec B$
+      \item[] inclusion $A\hookrightarrow B$ gives map $Y \to X$ ($q \leadsto p$) $\implies$ $\mathfrak M_q$ lies over $\mathfrak M_p$.  (usually 2 points of $Y$ $\leadsto$ 1 point of $X$)
+    \end{itemize}
+
+    Say $P = (g)$, $g$ irreducible in $A$.
+
+    What is a description of $Q$, the prime ideals lying over $P$ ($A \cap Q = P$)?  \\
+    \emph{Cases}:
+    \begin{itemize}
+      \item $P$ remains prime: $PB = Q$ is a prime ideal
+      \item $f\in P$ ($g$ divides $f$)  Then $P$ ramifies: there exists a unique prime $Q$ of $B$ over $P$, and $Q^2 = PB$.
+      \item $P$ does not remain prime, and $f\notin P$.  Then there
+      exist two primes $Q$, $Q' = sigma Q$ over $P$ and $PB = Q \cap Q'$.
+    \end{itemize}
+
+    (EXPLANATION OF FIRST BULLET NOT INCLUDED)
+
+    Second bullet: Say $f\in P$.  What is $B / PB$?  It's $A[w] / (w^2 - f, g)$.
+    Let $\bar A = A / (g)$.  Then we can write $B / PB$ as $\bar A[w] / (w^2)$.
+    Then $P \longleftrightarrow (0) \in \bar A$, and $PB \longleftrightarrow (0)
+    \in B / PB$.  Then $w$ generates the prime ideal of $\bar B$, and the
+    quotient is $\bar A$.  This gives, using the correspondence theorem, a prime
+    ideal $Q$ of $B$, $Q = (w, g)$.
+
+    $Q^2 = (w^2, wg, g^2) = (f, wg, g^2)$.  Then $\gcd(f, g^2) = g = uf + vg^2$,
+    so $g\in Q^2$.
+
+    Third bullet: $f\notin P$, $PB$ not prime.  Choose $Q$ lying over $P$.  Let
+    $Q' = \sigma Q$.  Since $Q$ lies over $P$, so does $Q'$ because $\sigma$
+    fixes $A$.  Since $PB$ is not prime, $Q \ne B$.
+    \begin{lem*}
+      $Q \cap Q' = PB$
+
+      ($Q \ne PB$, $\therefore Q \ne Q'$)
+    \end{lem*}
+    \begin{proof}
+      Take $\beta \in Q \cap Q'$, $\beta = a + bw$.  Then $\beta' = \sigma\beta
+      = a - bw$, so $\beta'\in Q \cap Q'$.  Note that $\sigma$ fixes $Q \cap
+      Q'$: $\sigma(Q \cap Q') = \sigma Q \cap \sigma Q' = Q' \cap Q$.
+
+      \begin{align*}
+        \beta + \beta' & = 2a \in Q \cap Q' \cap A = P \\
+        \beta\beta'    & = a^2 - b^2 f \in Q \cap Q' \cap A = P \\
+                       & \therefore b^2 f \in P
+      \end{align*}
+      $f\notin P$, $\therefore b\in P$, $ain P$, $\beta \in PB$.  Thus, $PB = Q
+      \cap Q'$.
+    \end{proof}
+
+    \begin{example*}
+      $w^2 = f = x^2 + y^2 - 1$, $g = y$
+
+      Then $g \nmid f$.  So we have $P = (g)$ remains prime.
+
+      Take $B / PB \approx \mathbb C[x, w] / (w^2 - x^2 + 1)$.  This is a
+      domain, so the 0-ideal is prime.  Therefore, $P$ remains prime.
+%    \end{example*}
+%
+%    \begin{example*}
+      Take $g = y - 1$.  (This divides $y^2 - 1$.)
+
+      Then $B / P_2B \approx \mathbb C[x, w] / (w^2 - x^2)$, so $P_2B$ does not
+      remain prime.
+
+      If we draw a picture, we see that $y = 0$ goes through the middle of the
+      circle, but $y = 1$ is tangent.
+
+    \end{example*}
+    \emph{Show}: If $\Delta = \{f = 0\}$ (branch locus) and $C = \{g = 0\}$
+    (curve) intersect $\pitchfork$ (intersect transversely; the tangent lines
+    are distinct) at some point $p$.
+
+    \begin{thm*}
+      $C$ remains prime.
+    \end{thm*}
+    \begin{proof}
+      Choose coordinates so that $p = (0, 0)$.  Then $f = \sum a_{ij} x^i y^j$,
+      $g = \sum b_{ij} x^i y^j$.  $\Delta$ and $C$ meet at $p$, so $a_{00} =
+      b_{00} = 0$.
+
+      Then $f = a_{10} x + a_{01} y + \cdots$.  The tangent line is $a_{10} x +
+      a_{01} y = 0$.  We also have $g = b_{10}x + b_{01}y + \cdots$, with
+      tangent line $b_{10} x + b_{01} y = 0$.
+
+      Let's make a linear change of coordinates: $f = x + u$, $g = y + u$, $u,
+      v$ have all terms of degree $\ge 2$.
+
+      Now let's make an analytic change of coordinates.  Set $x' = x + u$, $y' =
+      y + v$.  Then $\left(\frac{\partial(x', y')}{\partial(x, y)}\right)_{00} =
+      \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}$ is invertible.  The inverse
+      function theorem says that this operator is invertible locally
+      (analytically).
+
+      $\mathbb C_{x,y}^2 \to \mathbb C_{x',y'}^2$: replace $x, y$ with $x', y'$.
+      Then $w^2 = x'$ and $g = y'$.  This doesn't split locally.
+    \end{proof}
+
+    \begin{digression}
+      A power series $c_k x^k + c_{k+1} x^{k+1} + \cdots$, $c_k \ne 0$ is a
+      square of a series $\iff$ $k$ is even.
+    \end{digression}
+
+  \subsection*{Projective Double Plane}
+    Start with an affine double plane ${w'}^2 = F(x', y')$.  Say $F$ has degree
+    $d = 2k$.
+
+    Make the substitution $\frac xz = x'$, $\frac yz = y'$, $\frac{w}{z^k} =
+    w'$.  Then $\left(\frac{w}{z^k}\right)^z = F\left(\frac xz, \frac yz\right)
+    \to \fbox{\ensuremath{w^2 = f(x, y, z)}}$ (homogenous of degree $d$), a
+    double cover of $\mathbb P^2_{xyz}$.
+
+    To embed, we need weighted projective space, where $x$, $y$, $z$ have weight
+    1 and $w$ has weight $k$.  In this space, $(w, x, y, z) = (\lambda^k w,
+    \lambda x, \lambda y, \lambda z)$.  (Note: ``weighted projective spaces are
+    a bit pathological.'')  A better way to do this is to treat this as a sheaf
+    of algebras over $\mathbb P^2_{xyz}$.
 \end {document}
 
