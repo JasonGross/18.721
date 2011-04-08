@@ -87,11 +87,11 @@
 %  %\usepackage{pgf,tikz}
 %  %\usetikzlibrary{arrows}
 %  
-  \lazyexecute{\includegraphics}{\usepackage[pdftex]{graphicx}}
+  \lazyexecute{\includegraphics,\reflectbox}{\usepackage[pdftex]{graphicx}}
   \usepackage{pdfpages}
   \usepackage[plainpages=false,pdfpagelabels,unicode]{hyperref}
 \else
-  \lazyexecute{\includegraphics}{\usepackage[dvips]{graphicx}}
+  \lazyexecute{\includegraphics,\reflectbox}{\usepackage[dvips]{graphicx}}
   \usepackage{pstricks,pstricks-add,pst-math,pst-xkey}
 \fi
 
@@ -161,6 +161,7 @@
 \newcommand{\thmref}[1]{Theorem~\ref{#1}}
 %=============================== End AMSTHM ===============================
 \usepackage{esint}
+\usepackage{stackrel}
 %\usepackage[table]{xcolor}
 \usepackage{xcolor}
 \usepackage{xifthen}
@@ -168,7 +169,19 @@
 %\usepackage{dcpic}
 %\else
 
-\lazyexecute{\DeclarePairedDelimiter,\coloneqq}{\usepackage{mathtools}[2010/07/11]}
+\lazyexecute{\DeclarePairedDelimiter,\coloneqq,\Aboxed}{
+  \usepackage{mathtools}[2011/02/12]
+  \def\@Aboxed########1&########2\ENDDNE{%
+    \settowidth\@tempdima{$\displaystyle#1$}% <-
+    \addtolength\@tempdima{\fboxsep}%
+    \addtolength\@tempdima{\fboxrule}%
+    \global\@tempdima=\@tempdima
+    \kern\@tempdima
+    &
+    \kern-\@tempdima
+    \boxed{########1########2}
+  }
+}
 
 
 %\global\def\isxy{}
@@ -193,6 +206,29 @@
       }{}
     }
   }
+}
+\makeatother
+
+\makeatletter
+\renewcommand*{\Aboxed}[1]{\@aligedfbox{#1}{}#1&\@endalignedfbox}
+\def\@aligedfbox#1#2#3&#4\@endalignedfbox{%
+  \ifempty{#4}{%
+     \vrule
+     \edef\temp{\expandafter\unexpanded\expandafter{\@@aligedfbox{#2#3}#1&\@@endalignedfbox}}%
+     \temp
+  }{%
+    \edef\temp{\expandafter\unexpanded\expandafter{\@aligedfbox{#1}{#2#3}#4\@endalignedfbox}}%
+    \temp
+  }%
+}
+\def\@@aligedfbox#1#2&#3\@@endalignedfbox{%
+  \underline{\overline{{}#2\vphantom{#1}}}
+  \ifempty{#3}{%
+    \vrule
+  }{%
+    &
+    \expandafter\relax\@@aligedfbox{#1}#3\@@endalignedfbox
+  }%
 }
 \makeatother
 
@@ -235,8 +271,19 @@
 \DeclareMathOperator{\rad}{rad}
 \DeclareMathOperator{\trdeg}{tr\,deg}
 \DeclareMathOperator{\gk}{gk}
+\DeclareMathOperator{\fract}{fract}
+\DeclareMathOperator{\obj}{Obj}
+\DeclareMathOperator{\morph}{Morph}
 \newcommand{\lcmf}[2]{\lcm\left( #1 , #2 \right)}
 \def\dbar{{\mathchar'26\mkern-12mu d}}
+
+
+\let\from=\leftarrow
+\newcommand{\leadsfrom}{\mathreflectbox{\leadsto}}
+\makeatletter
+\newcommand{\mathreflectbox}{\mathpalette\math@reflectbox}
+\newcommand{\math@reflectbox}[2]{\reflectbox{$\m@th#1#2$}}
+\makeatother
 
 %\def\sfrac#1/#2{\leavevmode\kern.1em\raise.5ex\hbox{\the\scriptfont0 #1}\kern-.1em/\kern-.15em\lower.25ex\hbox{\the\scriptfont0 #2}}
 
@@ -455,7 +502,7 @@
 %\makeatletter
 %\newcommand{\@sgn}[1]{\mathop#1
 
-\newenvironment{digression}{\noindent\begin{math}%
+\newenvironment{digression}{\par\noindent\begin{math}%
 \left(\ \begin{minipage}{0.95\textwidth}% FIX: Make this more robust
   }{\end{minipage}\ \right)\end{math}}
 
