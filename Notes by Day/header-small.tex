@@ -67,6 +67,7 @@
 \newcommand{\thmref}[1]{Theorem~\ref{#1}}
 %=============================== End AMSTHM ===============================
 \usepackage{esint}
+\usepackage{stackrel}
 \ifincludeall
   \usepackage[table]{xcolor}
   \usepackage{xifthen}
@@ -143,8 +144,17 @@
 \DeclareMathOperator{\trdeg}{tr\,deg}
 \DeclareMathOperator{\gk}{gk}
 \DeclareMathOperator{\fract}{fract}
+\DeclareMathOperator{\obj}{morph}
+\DeclareMathOperator{\morph}{morph}
 \newcommand{\lcmf}[2]{\lcm\left( #1 , #2 \right)}
 \def\dbar{{\mathchar'26\mkern-12mu d}}
+
+\let\from=\leftarrow
+\newcommand{\leadsfrom}{\mathreflectbox{\leadsto}}
+\makeatletter
+\newcommand{\mathreflectbox}{\mathpalette\math@reflectbox}
+\newcommand{\math@reflectbox}[2]{\reflectbox{$\m@th#1#2$}}
+\makeatother
 
 \def\sfrac#1/#2{\leavevmode\kern.1em\raise.5ex\hbox{\the\scriptfont0 #1}\kern-.1em/\kern-.15em\lower.25ex\hbox{\the\scriptfont0 #2}}
 

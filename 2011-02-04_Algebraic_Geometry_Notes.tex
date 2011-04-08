@@ -1,22 +1,22 @@
 \documentclass[letterpaper,11pt,twoside]{article}
-\usepackage{etextools,pdftexcmds,verbatim}
+\usepackage{etextools,pdftexcmds,verbatim,ifplatform,catchfile}
 \input{header}
 
 \makeatletter
-\newwrite\@tempwritea
-\newif\if@shellescape
-\edef\@testfilename{\jobname.18}% fix; this gets *s?!!!!
-\immediate\openout\@tempwritea\@testfilename\relax
-\immediate\write\@tempwritea{Testing for rm on shell escape}%
-\immediate\closeout\@tempwritea\relax
-\show\@testfilename
-\IfFileExists\@testfilename{%
-  \immediate\write18{rm "\@testfilename"}%
-  \IfFileExists\@testfilename{\@shellescapefalse}{\@shellescapetrue}%
-}{%
-  \PackageError{testwrite18}{Weird error, no file.}{I tried to make a file, and it failed.}%
-}
-\newcommand{\ifshellescape}{\if@shellescape\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi}
+% \newwrite\@tempwritea
+% \newif\if@shellescape
+% \edef\@testfilename{\jobname.18}% fix; this gets *s?!!!!
+% \immediate\openout\@tempwritea\@testfilename\relax
+% \immediate\write\@tempwritea{Testing for rm on shell escape}%
+% \immediate\closeout\@tempwritea\relax
+% \show\@testfilename
+% \IfFileExists\@testfilename{%
+%   \immediate\write18{rm "\@testfilename"}%
+%   \IfFileExists\@testfilename{\@shellescapefalse}{\@shellescapetrue}%
+% }{%
+%   \PackageError{testwrite18}{Weird error, no file.}{I tried to make a file, and it failed.}%
+% }
+\newcommand{\Ifshellescape}{\ifshellescape\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi} %\if@shellescape\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi}
 
 %============== Copy Diagrams ======================
 \write18{mkdir "Notes by Day"}
@@ -36,34 +36,37 @@
 }
 \makeatletter
 \edef\bash@header{\expandafter\@gobble\detokenize{#!/bin/bash}}
+\edef\rmcommand{\ifwindows del \else rm \fi}
+\edef\copyfcommand{\ifwindows copy /y \else cp -f \fi}
+\edef\movecommand{\ifwindows move \else mv \fi}
+\edef\startscriptcommand{\ifwindows start \else bash \fi}
 \newcommand{\writeallcompiles}{%
   \immediate\openout\compileout compile-all.tex\relax
-  \immediate\write\compileout{\bash@header}%
+  \unless\ifwindows
+    \immediate\write\compileout{\bash@header}%
+  \fi
   \immediate\write\compileout{pushd "Notes by Day"}%
   \forcsvloop\filelist\do{%
     \message{Writing compilation routine for ##1^^J}%
-    \immediate\write\compileout{(rm "##1.pdf") & (pdflatex "##1.tex") && (rm "##1.pdf") && (pdflatex "##1.tex")}%
-    \immediate\write\compileout{cp -f "##1.tex" "##1.tex.old"}%
-    \immediate\write\compileout{copy /y "##1.tex" "##1.tex.old"}%
+    \immediate\write\compileout{(\rmcommand "##1.pdf") & (pdflatex "##1.tex") && (\rmcommand "##1.pdf") && (pdflatex "##1.tex")}%
+    \immediate\write\compileout{\copyfcommand "##1.tex" "##1.tex.old"}%
   }%
   \immediate\write\compileout{popd}%
   \immediate\closeout\compileout
-  \immediate\write18{mv compile-all.tex compile-all.bat}%
+  \immediate\write18{\movecommand compile-all.tex compile-all.bat}%
   \immediate\write18{chmod +x compile-all.bat}%
 }
 
 
 \newcommand{\compileallfiles}{
   \immediate\write18{echo Copying diagrams...}%^^J
-  \immediate\write18{copy /y *-*-*_Diagram_*.pdf "Notes by Day/"}%
-  \immediate\write18{cp -f *-*-*_Diagram_*.pdf "Notes by Day/"}%
+  \immediate\write18{\copyfcommand *-*-*_Diagram_*.pdf "Notes by Day/"}%
   \message{Writing compilation routines...^^J}%
   \writeallcompiles
   \immediate\write18{echo Compiling files...}%^^J}
-  \immediate\write18{start compile-all.bat}%
-  \immediate\write18{bash compile-all.bat}%
+  \immediate\write18{\startscriptcommand compile-all.bat}%
 }
-\AtBeginDocument{\AtEndDocument{\immediate\write18{rm "\jobname.sec"}}}
+\AtBeginDocument{\AtEndDocument{\immediate\write18{\rmcommand "\jobname.sec"}}}
 \AtBeginDocument{\AtEndDocument{\compileallfiles}}
 
 
@@ -116,11 +119,21 @@
 \newcommand{\iffilessame}[2]{%
   \appfileto{#1}{\@firstfile}%
   \appfileto{#2}{\@secondfile}%
+%   \IfFileExists{#1}{%
+%     \IfFileExists{#2}{%
+%       \CatchFileDef{\@firstfile}{#1}{\let\do\@makeother\dospecials}
+%       \CatchFileDef{\@secondfile}{#2}{\let\do\@makeother\dospecials}
   \ifx\@firstfile\@secondfile
     \expandafter\@firstoftwo
   \else
     \expandafter\@secondoftwo
   \fi
+%     }{%
+%       \@secondoftwo
+%     }%
+%   }{%
+%     \@firstoftwo
+%   }%
 }
 
 %================ writing to this ===============
@@ -202,7 +215,7 @@
  \iffilessame{\notes@filenametemp}{\notes@filenameold}{%
    \message{\notes@filenamepart\space found to have not changed.^^J}%
  }{%
-    \ifshellescape{%
+    \Ifshellescape{%
       \message{\notes@filenamepart\space found to have changed.  Updating it...^^J}%
       \copyfile{\notes@filenametemp}{\notes@filename}%
       \compilefilepart{\notes@filenamepart}%
@@ -444,13 +457,13 @@
     \end{proof}
     
     \begin{defn*}
-      If all the $f_i$ vanish at $p$, then $p$ is called a \emph{singular} point of $C = V(f)$.  Otherwise, say that $C$ is \emph{non-singluar} at $p$.  Say that $C$ is a \emph{non-singular curve} if it has no singular points.
+      If all the $f_i$ vanish at $p$, then $p$ is called a \emph{singular} point of $C = V(f)$.  Otherwise, say that $C$ is \emph{non-singular} at $p$.  Say that $C$ is a \emph{non-singular curve} if it has no singular points.
     \end{defn*}
     
     \subsubsection{Nonsingular curves}
       e.g. 1, an irreducible conic is always non-singular
       \begin{proof}
-        Convert to $x^2 - yz = 0$.  $f_x = 2x$, $f_y = -z$, $f_z = -y$.  Since $(x, y, z)\in \mathbb P^2$, not all these can be zero, so it's nonsinular
+        Convert to $x^2 - yz = 0$.  $f_x = 2x$, $f_y = -z$, $f_z = -y$.  Since $(x, y, z)\in \mathbb P^2$, not all these can be zero, so it's nonsingular
       \end{proof}
       
       e.g. 2, An irreducible plane cubic can have at most one singular point (exercise)
@@ -608,7 +621,7 @@
           \end{itemize}
           Then the Euler characteristic is $E = 3d- 3d^2 + 2d^2 = 3d - d^2 = d(3 - d)$.  Then $g = \frac12(d - 1)(d - 2)$.
         \end{enumerate}
-      \item Let $C$ be a smooth curve of degree $d$.  Assume the coefficient of $z^d$ is not zero.  Divide by that coefficient, giving $f(x, y, z) = z^d - a_1(x, y) z^{d-1} + \cdots \pm a_d(x, y)$.  Homogenous polynomial $\implies$ $a_i(x, y)$ is degree $i$ in $x$ and $y$.  Then drop $z$ by projection onto $\mathbb P^1(x, y)$.
+      \item Let $C$ be a smooth curve of degree $d$.  Assume the coefficient of $z^d$ is not zero.  Divide by that coefficient, giving $f(x, y, z) = z^d - a_1(x, y) z^{d-1} + \cdots \pm a_d(x, y)$.  Homogeneous polynomial $\implies$ $a_i(x, y)$ is degree $i$ in $x$ and $y$.  Then drop $z$ by projection onto $\mathbb P^1(x, y)$.
         
         Fix $(x_0, y_0)$.  View $z^d - a_1(x_0, y_0) z^{d-1} + \cdots \pm a_d(x_0, y_0) = 0$ as a polynomial of degree $d$ in $z$.  Typically this has $d$ roots, but for some values of $(x, y)$, there are $d-1$ roots.
         
@@ -1876,7 +1889,7 @@
       $B$ is normal.
     \end{lem*}
     \begin{proof}
-      Let $\beta = a + b w$ in $\fract(B)$.  It is interal over $A$, and not in
+      Let $\beta = a + b w$ in $\fract(B)$.  It is integral over $A$, and not in
       $A$ ($b \ne 0$), irreducible polynomial has coefficients in $A$.  $t^2 - (\beta + \beta') t + \beta \beta'$, $\beta' = \sigma \beta$.  Then $\beta + \beta' = 2a \in A$, $\beta\beta' = a^2 - b^2 f$ with $b^2 f \in A$.  Since $f$ is square-free, $b\in A$, and so $\beta \in B$.
     \end{proof}
 
@@ -1995,7 +2008,7 @@
     
     Make the substitution $\frac xz = x'$, $\frac yz = y'$, $\frac{w}{z^k} =
     w'$.  Then $\left(\frac{w}{z^k}\right)^z = F\left(\frac xz, \frac yz\right)
-    \to \fbox{\ensuremath{w^2 = f(x, y, z)}}$ (homogenous of degree $d$), a
+    \to \fbox{\ensuremath{w^2 = f(x, y, z)}}$ (homogeneous of degree $d$), a
     double cover of $\mathbb P^2_{xyz}$.
 
     To embed, we need weighted projective space, where $x$, $y$, $z$ have weight
@@ -2016,6 +2029,172 @@
 
 
 \begin{notessection}{4}{8}{2011}
+  \subsection*{Category Theory}
+    \begin{defn*}
+      A \emph{category} is a collection of objects, together with morphisms
+      (maps) between objects satisfying the following axioms:
+      \begin{itemize}
+        \item Composition of morphisms is defined.
+          $$
+          \xymatrix{
+            x \ar[r]^f \ar@/_/[rr]_{f\circ g\text{\makebox[0pt][l]{ is defined}}} & y \ar[r]^g & z
+          }
+          $$
+        \item Associative law: If we have
+          $$f \stackrel{f}{\to} y \stackrel{g}{\to} z \stackrel{h}{\to} w,$$
+          then $(h \circ g) \circ f = h \circ (g \circ f)$
+        \item For all objects $y$, there exists an identity $y
+        \xrightarrow{i_y} y$ such that $g\circ i_y = g$, $i_y \circ f = f$ for
+        all $f$ and $g$ with the appropriate domains and ranges.
+      \end{itemize}
+    \end{defn*}
+
+    Examples of categories include the category of: sets; topological spaces, algebras.
+
+    \begin{defn*}
+      Let $C$ and $D$ be categories.  Then a \emph{functor} $F$ is a map $C
+      \stackrel{F}{\to} D$ which maps $\obj(C) \to \obj(D)$ and maps $\morph(C)
+      \to \morph(D)$ and which (1) is compatible with composition and (2) maps
+      identity morphisms to identity morphisms.
+    \end{defn*}
+
+    \begin{example*}
+      (top) $\to$ (sets), $x \leadsto $ underlying set
+    \end{example*}
+
+
+    \begin{example*}
+      (groups) $\to$ (abelian groups), $G \to G / (aba^{-1}b^{-1} = 1)$
+    \end{example*}
+
+    \begin{example*}
+      (top) $\xrightarrow{1-1_q} $ abelian groups, $x \leadsto H_q(x)$
+      homology
+    \end{example*}
+
+
+    \begin{example*}
+      pointed path connected topologies $\to $ groups, $x\leadsto \pi_1(x)$
+      (homology group)
+    \end{example*}
+
+    \begin{defn*}
+      The \emph{dual category} $C^\circ$ of a category $C$ is defined by:
+      $$\obj(C^\circ) = \obj(C)$$
+      \begin{eqnarray*}
+        \text{A morphism} & & \text{A morphism} \\
+        x^\circ \xleftarrow{f^\circ} y^\circ & = & x \stackrel{f}{\to} y \\
+        \text{in }C^\circ & & \text{in }C
+      \end{eqnarray*}
+    \end{defn*}
+
+    \begin{defn*}
+      A \emph{contravariant functor} is a functor $F$ on $C$ from $C^\circ \to
+      D$.
+    \end{defn*}
+
+
+    \begin{example*}
+      (vect) $=$ category of complex vector spaces.  $(\text{vect})^\circ \to
+      (\text{vect})$, $v\leadsto v^*$.  This functor takes a vector space to its
+      dual space.
+    \end{example*}
+    
+
+    \begin{example*}
+      (top) $\to$ (abelian groups), $x\leadsto H^q(x)$ cohomology
+    \end{example*}
+
+
+
+    \begin{example*}
+      Let $X$ be a topological space.  Then let (opens) denote the category where the
+      objects are open sets in $X$, and the morphisms are inclusions $U \subset
+      V$; if $U \subset V$, $\exists! U \to V$, and if $U\not\subset V$,
+      $\not\exists U \to V$.
+    \end{example*}
+
+    \begin{defn*}
+      The \emph{sheaf of functions} $F$ on $X$ is the contravariant functor on
+      (opens): $(\text{opens})^\circ \stackrel{F}{\to} (\text{algebras})$, $U
+      \leadsto F(U) = \text{complex valued functions with domain $U$}$ (an
+      algebra).
+    
+      If $V \to U$ (i.e., $V\subset U$), then we can restrict a function on $U$
+      to $V$; we get $F(U) \stackrel{\text{rest}_V}{\leftarrow} F(U)$, $f|_V
+      \leadsfrom f$.
+
+      \emph{Sheaf Axiom for $F$}: Functions on $U$ can be defined ``locally.''
+      More formally, suppose $U$ is open in $X$ and $U^i$ are open subsets of
+      $U$ that together cover $U$.  Let $U^{ij}$ denote $U^i \cap U^j$.
+      $$U \leftarrow \{U^i\} \leftleftarrows \{U^{ij}\}$$
+      $$\xymatrix @R=0.5em{
+        U^i \\
+        & U^{ij} \ar@{_{(}->}[lu] \ar@{_{(}->}[ld] \\
+        U^j
+      }$$
+      Then, given functions $f^i$ on $U^i$ such that the
+      restriction of $f^i$ and $f^j$ to $U^{ij}$ are equal for all $i$, $j$, the
+      sheaf axiom requires that there exists a unique function $f$ on $U$ such
+      that the restriction of $f$ to $U^i$ is $f^i$.
+    \end{defn*}
+
+    \begin{example*}
+      Let $X = U$ be the real line.  Let $U^1 = (-\infty, 1)$ and let $U^2 = (0,
+      \infty)$.  Then $U = U^1 \cup U^2$.  Let $U^1 \cap U^2 = U^{12}$ ($= (0,
+      1)$).  Then if $f^1$ and $f^2$ are functions on $U^1$ and $U^2$ and if the
+      restriction of $f^1$ to $U^{12}$ is equal to the restriction of $f^2$ to
+      $U^{12}$, then $\exists!$ $f$ on $U$, such that its restriction to $U^i =
+      f^i$.
+    \end{example*}
+
+    \begin{defn*}
+      A \emph{sheaf on a topological space $X$} is a contravariant functor
+      $(\text{opens})^\circ \stackrel{M}{\to} C$ (some category), $U \leadsto
+      M(U)$ which satisfies the sheaf axiom:
+
+      Suppose $\{U^i\}$ covers $U$ and let $U^{ij} = U^i \cap U^j$.  Given an
+      element $\alpha^i \in M(U^i)$, if the restriction\footnote{If $V \to U$,
+      then $M(V) \xleftarrow{\text{``restriction''}} M(U)$.} of
+      $\alpha^i$ and $\alpha^j$ to $M(U^{ij})$ are equal for all $i$, $j$, then
+      $\exists!  \alpha \in M(U)$ whose restriction to $U^i$ is $\alpha^i$ for
+      all $i$.
+    \end{defn*}
+
+    We want to (eventually) write the sheaf axiom more compactly.  First, we
+    rewrite it in terms of $M(U)$.  Recall
+    $$\xymatrix @R=0.5em{
+      U^i \\
+      & U^{ij} \ar@{_{(}->}[lu] \ar@{_{(}->}[ld] \\
+      U^j
+    }$$
+    Then
+    $$0 \to M(U) \to \prod_i M(U^i) \stackrel[d_1^*]{d_0^*}{\rightrightarrows} \prod_{i,j} M(U^{ij})$$
+    $$U \leftarrow \{U^i\} \stackrel[d_1]{d_0}{\leftleftarrows} \{U^{ij}\}$$
+    Then the sheaf axiom says that the above sequence is exact\footnote{A
+    sequence is exact if the kernel of each map is equal to the image of the
+    preceding map.} if we replace $\rightrightarrows$ by the difference $d_0^*
+    - d_1^*$.\footnote{We're assuming that the category we're mapping into has a
+    $-$ (e.g., that of abelian groups), i.e., that each $M(U)$ has a zero
+    element and subtraction.}
+    
+    Think about for next time: The structure sheaf on $X = \mathbb A^1$ (with the Zariski
+    topology): $U$ open $= X - S$ (with $S$ a finite set) together with $U =
+    \emptyset$.  If $S = (s_1, \ldots, s_k)$.  Let $f = (x_1 - s_1)\cdots(x -
+    s_k)$, $\mathcal O(U) = \mathbb C[x][f^{-1}]$.  Check the sheaf axiom.
+\end{notessection}
+
+
+
+
+
+
+
+
+
+
+
+\begin{notessection}{4}{11}{2011}
   
 \end{notessection}
 

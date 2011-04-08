@@ -28,6 +28,8 @@
 \chead{\cheadcontent}
 \cfoot{\thepage\space of \pageref{LastPage}}
 
+\newcommand{\flag}[2][]{#2\footnote{#1}}
+
 \begin {document}
 \setcounter {section}{4}\section {Monday, February 14, 2011}
   \subsection{Plane curves}
@@ -92,7 +94,7 @@
           \end{itemize}
           Then the Euler characteristic is $E = 3d- 3d^2 + 2d^2 = 3d - d^2 = d(3 - d)$.  Then $g = \frac12(d - 1)(d - 2)$.
         \end{enumerate}
-      \item Let $C$ be a smooth curve of degree $d$.  Assume the coefficient of $z^d$ is not zero.  Divide by that coefficient, giving $f(x, y, z) = z^d - a_1(x, y) z^{d-1} + \cdots \pm a_d(x, y)$.  Homogenous polynomial $\implies$ $a_i(x, y)$ is degree $i$ in $x$ and $y$.  Then drop $z$ by projection onto $\mathbb P^1(x, y)$.
+      \item Let $C$ be a smooth curve of degree $d$.  Assume the coefficient of $z^d$ is not zero.  Divide by that coefficient, giving $f(x, y, z) = z^d - a_1(x, y) z^{d-1} + \cdots \pm a_d(x, y)$.  Homogeneous polynomial $\implies$ $a_i(x, y)$ is degree $i$ in $x$ and $y$.  Then drop $z$ by projection onto $\mathbb P^1(x, y)$.
 
         Fix $(x_0, y_0)$.  View $z^d - a_1(x_0, y_0) z^{d-1} + \cdots \pm a_d(x_0, y_0) = 0$ as a polynomial of degree $d$ in $z$.  Typically this has $d$ roots, but for some values of $(x, y)$, there are $d-1$ roots.
 

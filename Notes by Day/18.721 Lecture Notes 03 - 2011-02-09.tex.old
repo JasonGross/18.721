@@ -72,13 +72,13 @@
     \end{proof}
 
     \begin{defn*}
-      If all the $f_i$ vanish at $p$, then $p$ is called a \emph{singular} point of $C = V(f)$.  Otherwise, say that $C$ is \emph{non-singluar} at $p$.  Say that $C$ is a \emph{non-singular curve} if it has no singular points.
+      If all the $f_i$ vanish at $p$, then $p$ is called a \emph{singular} point of $C = V(f)$.  Otherwise, say that $C$ is \emph{non-singular} at $p$.  Say that $C$ is a \emph{non-singular curve} if it has no singular points.
     \end{defn*}
 
     \subsubsection{Nonsingular curves}
       e.g. 1, an irreducible conic is always non-singular
       \begin{proof}
-        Convert to $x^2 - yz = 0$.  $f_x = 2x$, $f_y = -z$, $f_z = -y$.  Since $(x, y, z)\in \mathbb P^2$, not all these can be zero, so it's nonsinular
+        Convert to $x^2 - yz = 0$.  $f_x = 2x$, $f_y = -z$, $f_z = -y$.  Since $(x, y, z)\in \mathbb P^2$, not all these can be zero, so it's nonsingular
       \end{proof}
 
       e.g. 2, An irreducible plane cubic can have at most one singular point (exercise)

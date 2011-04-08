@@ -28,6 +28,8 @@
 \chead{\cheadcontent}
 \cfoot{\thepage\space of \pageref{LastPage}}
 
+\newcommand{\flag}[2][]{#2\footnote{#1}}
+
 \begin {document}
 \setcounter {section}{11}\section {Wednesday, March 2, 2011}
   \begin{itemize}
@@ -111,14 +113,14 @@
     \begin{align*}
       x_i & = \sum_j p_{ij}x_j & p_{ij}\in I \\
       X  & = PX  & P\text{ matrix }(p_{ij}) \\
-      (\mathbb 1 - P)X & = 0  \\
-      Q(\mathbb 1 - P) = \delta \mathbb 1
+      (\mathbb{I} - P)X & = 0  \\
+      Q(\mathbb{I} - P) = \delta \mathbb{I}
     \end{align*}
-    where $Q$ is the cofactor matrix for $\mathbb 1 - P$ with entries in $A$, and $\delta = \det(\mathbb 1 - P)$.
+    where $Q$ is the cofactor matrix for $\mathbb{I} - P$ with entries in $A$, and $\delta = \det(\mathbb{I} - P)$.
     \begin{align*}
-      Q(\mathbb 1 - P)X & = 0 \\
+      Q(\mathbb{I} - P)X & = 0 \\
       \therefore \delta X = 0 \\
-      \mathbb 1 - P & = \begin{pmatrix} 1 - p_{11} & \cdots&  \\ & \ddots & \\ && 1 - p_{nn} \end{pmatrix} \\
+      \mathbb{I} - P & = \begin{pmatrix} 1 - p_{11} & \cdots&  \\ & \ddots & \\ && 1 - p_{nn} \end{pmatrix} \\
       \delta & = 1 - z
     \end{align*}
     Since the $p_{ij} \in I$, we have $z\in I$.  Then $(1 - z)X = 0$, so $(1 - z)$ kills $M$.
