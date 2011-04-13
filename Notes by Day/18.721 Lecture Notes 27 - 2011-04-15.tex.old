@@ -31,10 +31,7 @@
 \newcommand{\flag}[2][]{#2\footnote{#1}}
 
 \begin {document}
-\setcounter {section}{24}\section {Monday, April 11, 2011}
-  \begin{center}\includegraphics[width=\textwidth]{2011-04-11_Diagram_001}\end{center}
-  \begin{center}\includegraphics[width=\textwidth]{2011-04-11_Diagram_002}\end{center}
-  \begin{center}\includegraphics[width=\textwidth]{2011-04-11_Diagram_003}\end{center}
-  \begin{center}\includegraphics[width=\textwidth]{2011-04-11_Diagram_004}\end{center}
+\setcounter {section}{26}\section {Friday, April 15, 2011}
+
 \end {document}
 

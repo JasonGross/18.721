@@ -2195,6 +2195,146 @@
 
 
 \begin{notessection}{4}{11}{2011}
+  \begin{center}\includegraphics[width=\textwidth]{2011-04-11_Diagram_001}\end{center}
+  \begin{center}\includegraphics[width=\textwidth]{2011-04-11_Diagram_002}\end{center}
+  \begin{center}\includegraphics[width=\textwidth]{2011-04-11_Diagram_003}\end{center}
+  \begin{center}\includegraphics[width=\textwidth]{2011-04-11_Diagram_004}\end{center}
+\end{notessection}
+
+
+
+
+
+
+
+
+
+
+
+\begin{notessection}{4}{13}{2011}
+  \subsection*{Structure Sheaf on Affine Variety}
+    $X = \spec A$
+    
+    Define on basis $\mathcal B$ for topology $\mathcal B = \{\text{opens
+    }X_x,s\in A\} = \{X - V(s)\}$
+
+    Put $\mathcal O_X(X_s) = A_s$.
+
+    Similarly, if $M$ is an $A$-module, get sheaf $\mathcal M$, $\mathcal M(X_s)
+    = $localized module $M_s$.
+
+    $A_s = A[s^{-1}] = \{s^{-r}a\}$, $M_s = \mathset[s^{-r}m]{r\text{ integer},
+    m\in M}$
+
+    $s^{-r}a = s^{-r'}a'$ if $s^{r'}a = s^ra'$
+
+    Eqivalence relation: $m / s^r = m' / s^{r'}$ if $s^n s^{r'} m = s^n s^r m'$
+    for some $n$
+
+    $M_s$ is an $A_s$-module
+
+    \subsubsection*{Sheaf axiom on \texorpdfstring{$\mathcal B$}{B}}
+      $X_{s_1} \cup \cdots \cup X_{s_k}$ means $s_1 \cdots s_k$ generate a unit
+      ideal.  $\sum r_i s_i = 1$, $r_i\in A$.
+
+      Note $s_1^n$, \ldots, $s_k^n$ also generate the unit ideal.  So we can
+      also write $\sum r_i s_i^n = 1$ (difference coefficients $r_i$.  We can
+      replace $s_i$ by $s_i^n$.
+
+      Then the sheaf axiom (for $X$) says that
+      $$0 \to \mathcal M(X) \to \prod_i \mathcal M(X_{s_i})
+      \xrightarrow{\text{diff}} \prod_{i,j} \mathcal M(X_{(s_i s_j)}$$
+      is exact.
+      $$0 \to M \to \prod M_{s_i} \xrightarrow{\text{diff}} \prod_{i,j} M_{s_i s_j}$$
+      is exact.
+
+      We also need to check this for when we replace $X$ by $U \in \mathcal B$
+      ($U = X_t$)
+
+      Suppose $m\in M$, $m \leadsto 0$ in $M_{s_i}$ for all $i$.  This means
+      that $s_i^n m = s_i^n 0 = 0$ for $n \gg 0$.
+
+      Checking the exactness of the first $\to$: $m = 1\cdot m = \sum r_i s_i^n m = 0$.
+
+      Given $\alpha_i \in M_{s_i}$ and $\alpha_i = \alpha_j m M_{s_i s_j}$, we
+      want to find $w\in M$ with $w = \alpha_i$ in $M_{s_i}$ for all $i$.
+      $$\alpha_i = s^{-n} m_i,\quad \alpha_j = s^{-n}m_j, \quad m_i \in M$$
+      $\alpha_i = \alpha_j$ in $M_{s_i s_j}$ means $(s_is_j)^N s_j^n m_i = (s_i
+      s_j)^N s_i^n m_j$.  Let's absorb $s_i^N$ into $m_i$, so that our new
+      equation looks like
+      $$\boxed{s_j^\ell m_i = s_i^\ell m_j} \qquad (\ell = N + n)$$
+
+      Write $\sum r_i s_i^\ell = 1$.
+      \begin{align*}
+        m_j & = \sum r_i s_i^\ell m_j \\
+            & = \sum r_i s_j^\ell m_i \\
+            & = s_j^\ell w & w & = \sum r_i m_i \\
+        \Aboxed{m_j & = s_j^\ell w}\quad \forall j \\
+        \intertext{bring $s_j$s to the other side}
+        s_j^{-\ell}m_j & = w \in M
+      \end{align*}
+      But we need $n$, not $\ell$\ldots
+
+    \subsubsection*{Structure sheaf on \texorpdfstring{$\mathbb P^n$}{$\mathbb
+    P^n$}}
+      Coordinates $(x_0, \ldots, x_n)$.  Say we have covered $\mathbb P^n$ by
+      the standard affine $U_i = \{x_i \ne 0\}$.  We have a structure sheaf on
+      $U_i$ $ \approx \mathbb A^n$.
+
+      Open subsets of $U_i$ form a basis for the topology on $\mathbb P^n$.  So
+      we get a structure sheaf $\mathcal O_{\mathbb P}$ by descrbing it on each
+      $U_i$.
+
+      We must check that if we restrict the structure sheaf on $U_i$ and
+      $U_j$ to $U_i \cap U_j$, we get the same answer in both cases.
+
+    What's the benefit of describing the structure sheaf this way?  If you give
+    a variety by the topological space $X$ and a sheaf $\mathcal O_X$ of
+    algebras, then you ``know'' (in principle) $\mathcal O_X(U)$ for every $U$.
+    The benefit is that we can define ``morphism'' easily.
+    
+    \begin{defn*}
+      A \emph{regular function} on an open set $U$ is an element of $\mathcal
+      O_X(U)$.  (Given a regular function $f$, and a point $p$, we can evaluate
+      $f$ at $p$ to get a function.) 
+    \end{defn*}
+    
+    \begin{defn*}
+      Given two varieties, we can define a \emph{morphism}
+      $$(Y, \mathcal O_Y) \to (X, \mathcal O_X)$$
+      given by
+      \begin{itemize}
+        \item a continuous map $Y \xrightarrow{f} X$
+        \item which carries regular functions to regular functions
+      \end{itemize}
+    \end{defn*}
+    $$(\text{Functions on }X) \xrightarrow{\circ f} (\text{Functions on }Y)$$
+    $$g \leadsto g \circ f$$
+    If $U$ is an open set in $X$, then $V = f^{-1}U$ in $Y$.
+    $$(\text{Functions on }U) \xrightarrow{\circ f}(\text{Functions on }V)$$
+    $F_X = $ sheaf of functions on $X$
+
+    $$F_X(U) \xrightarrow{\circ f} F_Y(V)$$
+    $$F_X \xrightarrow{f^* = \circ f} F_Y$$
+    $$\xymatrix{
+      F_X(U) \ar[r]^{\circ f} & F_Y(V) \\
+      \mathcal O_X(U) \ar@{_{(}->}[u] \ar[r]^{\circ f} &  \mathcal O_Y(V)
+      \ar@{_{(}->}[u]
+    }$$
+    $$V = f^{-1}(U)$$
+\end{notessection}
+
+
+
+
+
+
+
+
+
+
+
+\begin{notessection}{4}{15}{2011}
   
 \end{notessection}
 
