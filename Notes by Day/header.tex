@@ -47,20 +47,13 @@
   }{#2}%
   \begingroup
     \immediate\write\lazy@out{\detokenize{\expandafter\newif\csname if@lazy@\detokenize{#2}\endcsname}}%
-    \ExpandNext{\def\do##1}{%
-      \ExpandNext{%
-        \noexpand\expandafter\let\csname lazy@definition@\string##1\endcsname=##1\relax
-        \protected\expandafter\def\csname lazy@definition@log@and@restore\string##1\endcsname
-      }{%
-        \ExpandNext{%
-          \noexpand\ifcandef
-        }{%
-          \ExpandNext{%
-            \noexpand\immediate\write\lazy@out
-          }{\detokenize{\csname @lazy@\detokenize{#2}true\endcsname}}%
+    \def\do##1{%
+      \expandafter\let\csname lazy@definition@\string##1\endcsname=##1\relax
+      \protected\expandafter\def\csname lazy@definition@log@and@restore\string##1\endcsname{%
+        \ifcandef{%
+          \immediate\write\lazy@out{\detokenize{\csname @lazy@\detokenize{#2}true\endcsname}}%
           \expandafter\let\expandafter##1\expandafter=\csname lazy@definition@\string##1\endcsname
-        }%
-        {% I'm not sure how many \expandafters I need in the following, since I should already know
+        }{% I'm not sure how many \expandafters I need in the following, since I should already know
           % that we're expanding ~everything, but I want to be on the safe side, so that, if, somehow,
           % we're not expanding everything, we're still fine.
           \expandafter\expandafter\expandafter\aftergroup\expandafter\noexpand\csname lazy@definition@log@and@restore\string##1\endcsname
@@ -176,10 +169,9 @@
 %\usepackage{dcpic}
 %\else
 
-\makeatletter
 \lazyexecute{\DeclarePairedDelimiter,\coloneqq,\Aboxed}{
   \usepackage{mathtools}[2011/02/12]
-  \def\@Aboxed#1&#2\ENDDNE{%
+  \def\@Aboxed########1&########2\ENDDNE{%
     \settowidth\@tempdima{$\displaystyle#1$}% <-
     \addtolength\@tempdima{\fboxsep}%
     \addtolength\@tempdima{\fboxrule}%
@@ -187,10 +179,9 @@
     \kern\@tempdima
     &
     \kern-\@tempdima
-    \boxed{#1#2}
+    \boxed{########1########2}
   }
 }
-\makeatother
 
 
 %\global\def\isxy{}

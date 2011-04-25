@@ -1,0 +1,129 @@
+\documentclass [letterpaper,11pt,twoside]{article}
+\input {header-small}
+\usepackage[margin=1in]{geometry}
+
+\usepackage{cancel}
+% email to abhinav@math.mit.edu
+\def\d{\, {\rm d}}
+
+%\usepackage{pgf,tikz}
+%\usetikzlibrary{arrows}
+\usepackage{wasysym}
+\usepackage{pdfcomment}
+
+\usepackage{datetime}
+\usepackage{verbatim}
+\usepackage[all]{xy}
+\def\classnumber{18.721}
+\def\classname{Algebraic Geometry}
+\edef\cheadcontent{\classnumber\space Notes}
+
+\pagestyle{fancy}
+\headheight 13.7pt
+\fancyhead{}
+\fancyhead{Jason Gross}%\today}
+\fancyfoot{}
+\lhead{Jason Gross}
+\rhead{\TeX ed on \today}
+\chead{\cheadcontent}
+\cfoot{\thepage\space of \pageref{LastPage}}
+
+\newcommand{\flag}[2][]{#2\footnote{#1}}
+
+\begin {document}
+\setcounter {section}{29}\section {Monday, April 25, 2011}
+  \subsection*{Axioms for Cohomology}
+    (q. cohomology sheaves)
+    \begin{itemize}
+      \item $H^0(X, M) = M(X)$
+      \item $H^0, H^1$, \ldots{} is cohomology functor(?)
+      \item $Y\xrightarrow{f}X$ is the inclusion of affine oben subset $N$ q. cohomology on $Y$, $\implies H^q(X, f_N) = 0$ for all $q > 0$
+    \end{itemize}
+    $Y$ open $\implies H^q(X, f_*N) \approx H^q(Y, N)$
+
+  \emph{Uniqueness}: Choose an affine open cover of $X$: $U = \{U^\nu\}$, $U \xrightarrow{j} X$, $M \xrightarrow{q} j_* j^* M$ \ldots (SOME MATERIAL NOT INCLUDED)
+
+  Define $R^0_M = j_* j^* M$
+  $$0 \to M \to R^0_M \to M^q \to 0$$
+  exact.
+
+  $H^q(R^0_M) = 0$ for $q > 0$.
+
+  $\therefore$ $$0 \to H^0(M) \to H^0(R^0_M) \to H^0(M^1) \to H^1(M) \to 0 \to H^1(M^1) \to H^2(M) \to 0 \cdots$$
+
+  $H^0$ is the identity by axiom 1, $\therefore$ $H^1(M) = H^0(M^1) / \operatorname{im}(H^0(R^0_M))$
+
+  $\therefore$ $H^1(M)$ is unique for all $M$.  Then $H^1(M^1) \approx H^2(M)$, so $H^2(M)$ is unique for all $M$.
+
+  $$0 \to M^1 \to R^1_M \to M^2 \to 0$$
+  So we can repeat the construction, replacing $M^1$ in $0 \to M \to R^0_M \to M^1 \to 0$ with $M^1$ to get an \emph{acyclic resolution} of $M$ (resolution means exact, acyclic means that $H^q(R^i_M) = 0$ for $q > 0$).
+  $$0 \to M \to R^0_M \to R^1_M \to R^2_M \to \cdots$$
+  $R^1_M = j_* j^* M^1$
+
+  Look at the complex
+  $$0 \to R^0_M \to R^1_M \to \cdots$$
+
+  Take $H^0(R^\cdot_M) = R^\cdot_M(X)$ global section ($\cdot$ is a ``variable'').  Not exact.  But it's a complex.\footnote{Definition of \emph{complex}: if you compose two maps, you get zero.}
+  Define $H^q(X, M) = \mathcal H^q(R^\cdot_M(X)) = (\operatorname{ker}/\operatorname{im})$ in the complex $R^\cdot_M(X)$.
+
+  We know $$0 \to M(X) \to R^0_M(X) \to R^1_M(X)$$ is exact.  $\therefore$ $M(X) \approx \mathcal H^0(R^\cdot_M(X))$  (First axiom \checkmark)
+
+  Second axiom: If $0 \to M \to M' \to M'' \to 0$ is exact, want long cohomological sequence.  $R^0_M = j_*j^* M$.  $j^*$ is the trivial restriction which is exact.  Since $U^\nu \xrightarrow{j^\nu} X$ is the inclusion of an affine open, so $j_*^\nu$ is exact.  $\therefore j_*$ is exact.
+
+  $N \to N' \to N''$, quasi-coherent on $U$, is exact if for all affine open sets $V \subset U$, $N(V) \to N(V') \to N(V'')$ is exact. \\
+  ?$W$ is an affine open in $X$?  \\
+  ?$j_* N(W) \to j_*N'(W) \to j_*N''(W)$ exact?
+
+  $$j_*N(W) = N(U^\nu \cap W)$$ affine because $U^\nu$ and $W$ are both affine (therefore $U^\nu \cap W$ is affine).  So yes.
+  $$* = N(U\cap W) \to N'(U \cap W) \to N''(U \cap W)$$
+
+  If $0 \to M \to M' \to M'' \to 0$ is exact, then $0 \to R^0_M \to R^0_{M'} \to R^{M''} \to 0$ is exact.
+
+  \begin{align*}
+    R^0_M & = j_*j^* M \\
+    R^0_M(X) & = j^* M(U)\qquad U\text{ affine} \\
+      & = M(U)
+  \end{align*}
+  If $0 \to M \to M' \to M'' \to 0$ is exact, then $0 \to M(U) \to M'(U) \to M''(U) \to 0$ is exact (because $U$ is affine).
+
+  Therefore $$0 \to R^0_M(X) \to R^0_{M'}(X) \to R^0_{M''}(X) \to 0$$ is exact.
+
+  Applying this to each degree separately,
+  $$0 \to R^\cdot_M(X) \to R^\cdot_{M'}(X) \to R^\cdot_{M''}(X) \to 0$$
+  is an exact sequence of complexes.  (So $\mathcal H^q$ is a cohomological functor.)  (Second axiom \checkmark)
+
+  $$
+  \xymatrix{
+    V \ar[r]^{f'} \ar[d]^{j'} & U \ar[d]^{j} \\
+    Y \ar[r]^f & X
+  }
+  $$
+  with $V^\nu = Y \cap U^\nu$ an affine open cover of $Y$.  We now suppress indices.
+
+  Let $N$ be quasicoherent on $Y$.
+
+  We want to show $H^q(X, f_* N) = 0$ for $q > 0$. We can show that $H^q(X, f_* N) \approx H^q(Y, N)$ whether or not $Y$ is affine.
+
+  On $Y$: say $S^0_N = j'_* {j'}^* N$  We get an acyclic resolution
+  $$0 \to N \to S^0_{N} \to S^1_N \to \cdots$$
+
+  On the other hand, take $j_*j^*(f_*N) = R^0_{f_*N}$.  We get an acyclic resolution
+  $$0 \to f_* N \to R^0_{f_*N} \to R^1_{f_*N} \to \cdots$$
+
+  \begin{align*}
+    H^q(Y, N) & \approx \mathcal H^q(S^\cdot_N(Y)) \\
+    H^q(X, f_*N) & \approx \mathcal H^q(R^\cdot_{f_*N}*(X))
+  \end{align*}
+  Plan: Show that $R^\cdot_{f_*N} \approx f_*S^\cdot_{N}$.  Then $R^\cdot_{f_*N}(X) \approx [f_*S^\cdot_N](X) = S^\cdot_N(Y)$ (by the definition of $f_*$).  Then we get isomorphisms(?).
+
+  $R^0_{f_*N} = j_*j^* f_*N$
+  $$j^*f_*N \approx f'_* {j'}^* N$$
+  Then $$R^0_{f_*N} = j_*j^* f_*N \approx j_* f'_* {j'}^* N$$
+  By commutativity of the diagram above, $$j_*f'_* = f_* j'_*$$
+  Then $$R^0_{f_*N} = j_*j^* f_*N \approx j_* f'_* {j'}^* N \approx f_* j'_* {j'}^* N = f_* S^0_N$$
+  (Third axiom \checkmark (almost; we need to check compatibility))
+
+  $$0 \to M \to R^0_M \to M^1 \to 0$$
+  $$0 \to H^{q-1}(M^1) \to H^q(M) \to 0$$
+\end {document}
+
