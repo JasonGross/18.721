@@ -1,0 +1,10 @@
+\expandafter \newif \csname if@lazy@\detokenize {\usepackage [pdftex]{graphicx}}\endcsname 
+\expandafter \newif \csname if@lazy@\detokenize {\usepackage {wrapfig}}\endcsname 
+\expandafter \newif \csname if@lazy@\detokenize {\usepackage {multicol}}\endcsname 
+\expandafter \newif \csname if@lazy@\detokenize {\usepackage {cancel}}\endcsname 
+\expandafter \newif \csname if@lazy@\detokenize {\usepackage {undertilde}}\endcsname 
+\expandafter \newif \csname if@lazy@\detokenize {\usepackage {pgf,tikz}\usetikzlibrary {arrows}}\endcsname 
+\expandafter \newif \csname if@lazy@\detokenize {\usepackage [exponent-product=\cdot ,per-mode=fraction,quotient-mode=fraction,fraction-function=\sfrac ]{siunitx} \DeclareSIUnit \statvolt {statV} \DeclareSIUnit \erg {erg} \DeclareSIUnit \parsec {parsec} \DeclareSIUnit \lightyear {ly} \DeclareSIUnit \electronvolt {eV} \DeclareSIUnit \year {y} }\endcsname 
+\csname @lazy@\detokenize {\usepackage [pdftex]{graphicx}}true\endcsname 
+\csname @lazy@\detokenize {\usepackage [pdftex]{graphicx}}true\endcsname 
+\csname @lazy@\detokenize {\usepackage [pdftex]{graphicx}}true\endcsname 

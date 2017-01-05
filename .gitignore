@@ -16,6 +16,7 @@
 *.out
 *.backup
 *.zip
+*.sec
 2009
 *\ 18.721\ Problem\ Set\ *.*
 .github/id_rsa*

@@ -21,8 +21,7 @@
 %% LaTeX version 1999/12/01 or later.
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{pset}
- [2010/10/06 v0.3a PSet Template]
-\LoadClassWithOptions{article}
+ [2011/02/20 v0.3b PSet Template]
 \RequirePackage{fancyhdr}
 \RequirePackage{lastpage}
 \RequirePackage{comment}
@@ -48,18 +47,20 @@
 \DeclareOption{nogeometry}{\@usegeometryfalse}
 \DeclareOption{geometry}{\@usegeometrytrue}
 \DeclareOption{exam}{\@examtrue}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions\relax
+\LoadClass{article}% \LoadClassWithOptions{article}
 \if@usegeometry
   \RequirePackage[margin=1in]{geometry}
 \fi
 \ExpandNext{\def\pset@question@begin#1}{\expandnext{\noexpand\ifstrcmp{#1}{question}{%
   \PackageError{pset}{Environment question not permitted to nest.  Inserting missing \string\end\string{question\string}.}%
     {Question environments are like sections; you can't nest a section inside another one (you'd need a subsection).}%
-  }}{%
+  \end{question}}}{%
     \begin{#1}%
   }%
 }
-\show\pset@question@begin
+
 \newenvironment{question}[1][]{%
  \section{#1}
    \if@showproblem
@@ -88,6 +89,9 @@
 \newcommand*{\classname}[1]{\gdef\@classname{#1}}
 \newcommand*{\professor}[1]{\gdef\@professor{#1}}
 \newcommand*{\collaborators}[1]{\gdef\@collaborators{#1}}
+\newcommand*{\recitation}[2][]{\gdef\@recitation{#2}\xifblank{#1}{\gdef\@shortrecitation{#2}}{\gdef\@shortrecitation{#1}}}
+\let\@recitation\relax
+\let\@shortrecitation\relax
 \let\@collaborators\relax
 \AtBeginDocument{
   \pagestyle{fancy}
@@ -106,7 +110,7 @@
   \fullexpand{%
     \noexpand\lhead{\@author \ifx\relax\@collaborators\else \noexpand\\ Collaborators: \expandafter\@collaborators\fi}
     \noexpand\rhead{\@duedate \ifx\relax\@collaborators\else \noexpand\\ \fi}
-    \noexpand\chead{\@classnumber\noexpand\space \if@exam Exam \else P-Set \fi \@psetnum \ifx\relax\@collaborators\else \noexpand\\ \fi}
+    \noexpand\chead{\@classnumber\noexpand\space \if@exam Exam \else P-Set \fi \@psetnum \ifx\relax\@shortrecitation\else\space(\@shortrecitation)\fi \ifx\relax\@collaborators\else \noexpand\\ \fi}
     \noexpand\cfoot{\noexpand\thepage\noexpand\space of \noexpand\pageref{LastPage}}
   }%
   \begingroup
